@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mi 19 Okt 2011 07:56:14 CEST
+EESchema Schematic File Version 2  date Mi 19 Okt 2011 19:33:39 CEST
 LIBS:rl_con
 LIBS:rl_device
 LIBS:rl_mech
@@ -56,6 +56,13 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	9400 4150 9400 5850
+Connection ~ 7800 6650
+Wire Wire Line
+	7800 6650 7800 4500
+Wire Wire Line
+	7800 4500 7500 4500
 Connection ~ 7550 6650
 Wire Wire Line
 	7550 5700 7550 6650
@@ -118,8 +125,6 @@ Wire Wire Line
 	11000 4150 11000 4250
 Wire Wire Line
 	10200 4250 10200 4150
-Wire Wire Line
-	9400 5000 9400 4150
 Connection ~ 9000 1450
 Wire Wire Line
 	7300 1450 11000 1450
@@ -189,8 +194,6 @@ Wire Wire Line
 	4350 3800 4350 3950
 Wire Wire Line
 	4650 3800 4650 4150
-Wire Wire Line
-	9400 5500 9400 5850
 Wire Wire Line
 	7000 4600 7200 4600
 Wire Wire Line
@@ -428,8 +431,6 @@ Wire Wire Line
 Wire Wire Line
 	7050 5350 7050 6650
 Connection ~ 7050 6650
-Wire Wire Line
-	8350 5500 8350 5850
 Wire Wire Line
 	4350 3950 2300 3950
 Connection ~ 3700 3950
@@ -693,20 +694,34 @@ Connection ~ 8750 4700
 Wire Wire Line
 	8750 5300 8750 6650
 Connection ~ 8750 6650
+Wire Wire Line
+	7250 4500 7200 4500
+Connection ~ 7200 4500
+Wire Wire Line
+	8350 5000 8350 5850
 $Comp
-L R R?
+L C C19
+U 1 1 4E9EA371
+P 7350 4500
+F 0 "C19" V 7400 4700 50  0000 C CNN
+F 1 "100nF" V 7300 4700 50  0000 C CNN
+	1    7350 4500
+	0    1    1    0   
+$EndComp
+$Comp
+L R R47
 U 1 1 4E9E6656
 P 8750 5050
-F 0 "R?" V 8830 5050 50  0000 C CNN
+F 0 "R47" V 8830 5050 50  0000 C CNN
 F 1 "10k" V 8750 5050 50  0000 C CNN
 	1    8750 5050
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R?
+L R R46
 U 1 1 4E9E6653
 P 7550 5450
-F 0 "R?" V 7630 5450 50  0000 C CNN
+F 0 "R46" V 7630 5450 50  0000 C CNN
 F 1 "10k" V 7550 5450 50  0000 C CNN
 	1    7550 5450
 	1    0    0    -1  
@@ -1453,24 +1468,6 @@ Text HLabel 4450 1100 0    60   UnSpc ~ 0
 12V
 Text Notes 2000 2800 1    60   ~ 0
 60mA / 3 LED
-$Comp
-L R R35
-U 1 1 4E9D7D6F
-P 9400 5250
-F 0 "R35" V 9480 5250 50  0000 C CNN
-F 1 "R" V 9400 5250 50  0000 C CNN
-	1    9400 5250
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R31
-U 1 1 4E9D7D6B
-P 8350 5250
-F 0 "R31" V 8430 5250 50  0000 C CNN
-F 1 "R" V 8350 5250 50  0000 C CNN
-	1    8350 5250
-	1    0    0    -1  
-$EndComp
 $Comp
 L SN74AHCT367 U4
 U 1 1 4E9D7A72

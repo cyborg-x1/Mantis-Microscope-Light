@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPCB (2010-00-09 BZR 23xx)-stable date = Mi 19 Okt 2011 09:49:22 CEST
+Cmp-Mod V01 Created by CvPCB (2010-00-09 BZR 23xx)-stable date = Mi 19 Okt 2011 14:30:31 CEST
 
 BeginCmp
 TimeStamp = /4E9D56CD;
@@ -123,6 +123,27 @@ BeginCmp
 TimeStamp = /4E9DCDDC;
 Reference = C18;
 ValeurCmp = 100nF;
+IdModule  = 0805_NONPOL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4E9CBC41/4E9EA371;
+Reference = C19;
+ValeurCmp = 100nF;
+IdModule  = 0805_NONPOL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4E9EBEAC;
+Reference = C20;
+ValeurCmp = 330nF;
+IdModule  = 0805_NONPOL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4E9EB842;
+Reference = C21;
+ValeurCmp = 330nF;
 IdModule  = 0805_NONPOL;
 EndCmp
 
@@ -988,13 +1009,6 @@ IdModule  = 1206_NONPOL;
 EndCmp
 
 BeginCmp
-TimeStamp = /4E9CBC41/4E9D7D6B;
-Reference = R31;
-ValeurCmp = R;
-IdModule  = 1206_NONPOL;
-EndCmp
-
-BeginCmp
 TimeStamp = /4E9CBC41/4E9D873B;
 Reference = R32;
 ValeurCmp = R;
@@ -1011,13 +1025,6 @@ EndCmp
 BeginCmp
 TimeStamp = /4E9CBC41/4E9D8580;
 Reference = R34;
-ValeurCmp = R;
-IdModule  = 1206_NONPOL;
-EndCmp
-
-BeginCmp
-TimeStamp = /4E9CBC41/4E9D7D6F;
-Reference = R35;
 ValeurCmp = R;
 IdModule  = 1206_NONPOL;
 EndCmp
@@ -1103,6 +1110,20 @@ BeginCmp
 TimeStamp = /4E9CBC41/4E9E6656;
 Reference = R47;
 ValeurCmp = 10k;
+IdModule  = 1206_NONPOL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4E9EBEAD;
+Reference = R48;
+ValeurCmp = 33k;
+IdModule  = 1206_NONPOL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4E9EB83E;
+Reference = R49;
+ValeurCmp = 33k;
 IdModule  = 1206_NONPOL;
 EndCmp
 

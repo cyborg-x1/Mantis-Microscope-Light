@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mi 19 Okt 2011 07:56:14 CEST
+EESchema Schematic File Version 2  date Mi 19 Okt 2011 19:33:39 CEST
 LIBS:rl_con
 LIBS:rl_device
 LIBS:rl_mech
