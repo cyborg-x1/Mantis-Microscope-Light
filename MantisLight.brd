@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date Mi 19 Okt 2011 19:41:56 CEST
+PCBNEW-BOARD Version 1 date Mi 19 Okt 2011 23:10:07 CEST
 
 # Created by Pcbnew(2010-00-09 BZR 23xx)-stable
 
@@ -9937,7 +9937,7 @@ ZLayer 0
 ZAux 8 E
 ZClearance 200 I
 ZMinThickness 100
-ZOptions 1 16 F 200 200
+ZOptions 1 16 S 200 200
 ZCorner 53000 8000 0
 ZCorner 54000 7000 0
 ZCorner 54000 1000 0
@@ -10061,7 +10061,7 @@ ZLayer 15
 ZAux 8 E
 ZClearance 200 I
 ZMinThickness 100
-ZOptions 1 16 F 200 200
+ZOptions 1 16 S 200 200
 ZCorner 53000 8000 0
 ZCorner 54000 7000 0
 ZCorner 54000 1000 0
@@ -10185,7 +10185,7 @@ ZLayer 15
 ZAux 13 E
 ZClearance 200 T
 ZMinThickness 100
-ZOptions 1 16 F 200 200
+ZOptions 1 16 S 200 200
 ZCorner 41102 49213 0
 ZCorner 41102 22087 0
 ZCorner 40000 21000 0
@@ -18147,7 +18147,7 @@ ZLayer 0
 ZAux 22 E
 ZClearance 157 T
 ZMinThickness 79
-ZOptions 1 16 F 200 200
+ZOptions 1 16 S 200 200
 ZCorner 54331 49213 0
 ZCorner 54331 8307 0
 ZCorner 40984 8307 0
@@ -31750,7 +31750,7 @@ ZLayer 15
 ZAux 20 E
 ZClearance 200 T
 ZMinThickness 100
-ZOptions 1 16 F 200 200
+ZOptions 1 16 S 200 200
 ZCorner 54370 49252 0
 ZCorner 54370 9055 0
 ZCorner 53543 8228 0
