@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mi 19 Okt 2011 19:33:39 CEST
+EESchema Schematic File Version 2  date So 23 Okt 2011 02:07:59 CEST
 LIBS:rl_con
 LIBS:rl_device
 LIBS:rl_mech
@@ -48,7 +48,7 @@ EELAYER END
 $Descr A4 11700 8267
 Sheet 4 5
 Title ""
-Date "19 oct 2011"
+Date "23 oct 2011"
 Rev ""
 Comp ""
 Comment1 ""
@@ -56,6 +56,9 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Connection ~ 8300 4250
+Wire Wire Line
+	8300 4250 5000 4250
 Wire Wire Line
 	9400 4150 9400 5850
 Connection ~ 7800 6650
@@ -78,7 +81,6 @@ Wire Wire Line
 Wire Wire Line
 	7400 4250 7400 4100
 Connection ~ 7400 4250
-Connection ~ 8300 4250
 Connection ~ 7700 4250
 Wire Wire Line
 	7700 4250 7700 4100
@@ -100,7 +102,6 @@ Wire Wire Line
 Connection ~ 5300 4250
 Wire Wire Line
 	5300 4100 5300 4250
-Connection ~ 8300 1800
 Wire Wire Line
 	8300 1950 8300 1800
 Connection ~ 6200 1800
@@ -110,11 +111,7 @@ Connection ~ 5600 1800
 Wire Wire Line
 	5600 1800 5600 1950
 Wire Wire Line
-	8600 1950 8600 1800
-Wire Wire Line
-	8600 1800 5000 1800
-Wire Wire Line
-	5000 1800 5000 1950
+	5000 1950 5000 1800
 Wire Wire Line
 	9000 3650 9000 3550
 Wire Wire Line
@@ -636,12 +633,6 @@ Wire Wire Line
 Wire Wire Line
 	8000 3600 8000 3450
 Wire Wire Line
-	8600 3600 8600 3450
-Wire Wire Line
-	8600 3050 8600 2900
-Wire Wire Line
-	8600 2500 8600 2350
-Wire Wire Line
 	8300 2500 8300 2350
 Wire Wire Line
 	8300 3050 8300 2900
@@ -676,11 +667,7 @@ Wire Wire Line
 	7700 1800 7700 1950
 Connection ~ 7700 1800
 Wire Wire Line
-	5000 4100 5000 4250
-Wire Wire Line
-	5000 4250 8600 4250
-Wire Wire Line
-	8600 4250 8600 4100
+	5000 4250 5000 4100
 Wire Wire Line
 	5600 4250 5600 4100
 Connection ~ 5600 4250
@@ -699,6 +686,8 @@ Wire Wire Line
 Connection ~ 7200 4500
 Wire Wire Line
 	8350 5000 8350 5850
+Wire Wire Line
+	5000 1800 8300 1800
 $Comp
 L C C19
 U 1 1 4E9EA371
@@ -797,42 +786,6 @@ F 0 "D46" H 8300 2250 50  0000 C CNN
 F 1 "LED" H 8300 2050 50  0000 C CNN
 	1    8300 2150
 	0    1    1    0   
-$EndComp
-$Comp
-L LED D49
-U 1 1 4E9D873E
-P 8600 2150
-F 0 "D49" H 8600 2250 50  0000 C CNN
-F 1 "LED" H 8600 2050 50  0000 C CNN
-	1    8600 2150
-	0    1    1    0   
-$EndComp
-$Comp
-L LED D50
-U 1 1 4E9D873D
-P 8600 2700
-F 0 "D50" H 8600 2800 50  0000 C CNN
-F 1 "LED" H 8600 2600 50  0000 C CNN
-	1    8600 2700
-	0    1    1    0   
-$EndComp
-$Comp
-L LED D51
-U 1 1 4E9D873C
-P 8600 3250
-F 0 "D51" H 8600 3350 50  0000 C CNN
-F 1 "LED" H 8600 3150 50  0000 C CNN
-	1    8600 3250
-	0    1    1    0   
-$EndComp
-$Comp
-L R R32
-U 1 1 4E9D873B
-P 8600 3850
-F 0 "R32" V 8680 3850 50  0000 C CNN
-F 1 "R" V 8600 3850 50  0000 C CNN
-	1    8600 3850
-	1    0    0    -1  
 $EndComp
 $Comp
 L R R29
