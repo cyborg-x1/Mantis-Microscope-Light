@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  So 23 Okt 2011 02:08:04 CEST
+# EESchema Netlist Version 1.1 created  Mo 24 Okt 2011 15:43:51 CEST
 (
  ( /4E9EBEAD $noname  R48 33k {Lib=R}
   (    1 GND )
@@ -434,27 +434,27 @@
   (    1 N-000128 )
   (    2 N-000099 )
  )
- ( /4E9CBC41/4E9D8588 $noname  R39 R {Lib=R}
+ ( /4E9CBC41/4E9D8588 $noname  R39 30R {Lib=R}
   (    1 N-000129 )
   (    2 N-000131 )
  )
- ( /4E9CBC41/4E9D8586 $noname  R38 R {Lib=R}
+ ( /4E9CBC41/4E9D8586 $noname  R38 30R {Lib=R}
   (    1 N-000122 )
   (    2 N-000131 )
  )
- ( /4E9CBC41/4E9D8584 $noname  R37 R {Lib=R}
+ ( /4E9CBC41/4E9D8584 $noname  R37 30R {Lib=R}
   (    1 N-000188 )
   (    2 N-000131 )
  )
- ( /4E9CBC41/4E9D8582 $noname  R36 R {Lib=R}
+ ( /4E9CBC41/4E9D8582 $noname  R36 30R {Lib=R}
   (    1 N-000074 )
   (    2 N-000131 )
  )
- ( /4E9CBC41/4E9D8580 $noname  R34 R {Lib=R}
+ ( /4E9CBC41/4E9D8580 $noname  R34 30R {Lib=R}
   (    1 N-000187 )
   (    2 N-000131 )
  )
- ( /4E9CBC41/4E9D857C $noname  R33 R {Lib=R}
+ ( /4E9CBC41/4E9D857C $noname  R33 30R {Lib=R}
   (    1 N-000132 )
   (    2 N-000131 )
  )

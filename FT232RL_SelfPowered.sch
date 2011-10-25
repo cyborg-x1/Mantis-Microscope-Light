@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date So 23 Okt 2011 02:07:59 CEST
+EESchema Schematic File Version 2  date Mo 24 Okt 2011 16:23:56 CEST
 LIBS:rl_con
 LIBS:rl_device
 LIBS:rl_mech
@@ -48,7 +48,7 @@ EELAYER END
 $Descr A4 11700 8267
 Sheet 5 5
 Title ""
-Date "23 oct 2011"
+Date "24 oct 2011"
 Rev ""
 Comp ""
 Comment1 ""
