@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mo 24 Okt 2011 16:23:56 CEST
+EESchema Schematic File Version 2  date Do 03 Nov 2011 14:47:05 CET
 LIBS:rl_con
 LIBS:rl_device
 LIBS:rl_mech
@@ -48,7 +48,7 @@ EELAYER END
 $Descr A4 11700 8267
 Sheet 4 5
 Title ""
-Date "24 oct 2011"
+Date "3 nov 2011"
 Rev ""
 Comp ""
 Comment1 ""
@@ -1669,7 +1669,7 @@ L R R5
 U 1 1 4E9CC7C7
 P 1600 7450
 F 0 "R5" V 1680 7450 50  0000 C CNN
-F 1 "R" V 1600 7450 50  0000 C CNN
+F 1 "1k" V 1600 7450 50  0000 C CNN
 	1    1600 7450
 	0    1    1    0   
 $EndComp
@@ -1678,7 +1678,7 @@ L R R4
 U 1 1 4E9CC7C4
 P 1600 6800
 F 0 "R4" V 1680 6800 50  0000 C CNN
-F 1 "R" V 1600 6800 50  0000 C CNN
+F 1 "1k" V 1600 6800 50  0000 C CNN
 	1    1600 6800
 	0    1    1    0   
 $EndComp
@@ -1687,7 +1687,7 @@ L R R3
 U 1 1 4E9CC7BF
 P 1600 6200
 F 0 "R3" V 1680 6200 50  0000 C CNN
-F 1 "R" V 1600 6200 50  0000 C CNN
+F 1 "1k" V 1600 6200 50  0000 C CNN
 	1    1600 6200
 	0    1    1    0   
 $EndComp
