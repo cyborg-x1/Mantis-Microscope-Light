@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <qdebug.h>
 #include "ui_msl.h"
+#include "MicroScopeConnector.h"
 
 class msl : public QWidget
 {
@@ -26,7 +27,6 @@ class msl : public QWidget
 		void on_pushButton_Wmax_clicked();
 		void on_pushButton_UVmax_clicked();
 		void on_pushButton_off_clicked();
-		void on_verticalSlider_rgb_valueChanged(int value);
 		void on_verticalSlider_uv_valueChanged(int value);
 		void on_verticalSlider_white_valueChanged(int value);
 		void on_pushButton_EEPROM_clicked();

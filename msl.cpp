@@ -20,7 +20,7 @@ msl::msl(QWidget *parent)
     //Hide the EEProm settings-box
     this->ui.groupBox_EEProm->hide();
 
-
+    MicroScopeConnector t;
 }
 
 msl::~msl()
@@ -36,7 +36,6 @@ void msl::colorChanged (const QColor & color)
 	color.getRgb( &r, &g, &b);
 	color.getHsv(&h,&s,&v);
 
-	this->ui.verticalSlider_rgb->setValue(v);
 	updateLEDs();
 
 }
@@ -54,16 +53,10 @@ void msl::on_pushButton_UVmax_clicked()
 
 void msl::on_pushButton_off_clicked()
 {
-	this->ui.verticalSlider_rgb->setValue(0);
+
+	this->colorDialog->setCurrentColor(QColor::fromHsv(0,0,0));
 	this->ui.verticalSlider_uv->setValue(0);
 	this->ui.verticalSlider_white->setValue(0);
-}
-
-void msl::on_verticalSlider_rgb_valueChanged(int value)
-{
-	int h,s,v;
-	this->colorDialog->currentColor().getHsv(&h,&s,&v);
-	this->colorDialog->setCurrentColor(QColor::fromHsv(h,s,value));
 }
 
 void msl::on_verticalSlider_uv_valueChanged(int value)
@@ -96,7 +89,9 @@ void msl::on_pushButton_EEPROM_clicked()
 
 void msl::on_pushButton_RGB_off_clicked()
 {
-	this->ui.verticalSlider_rgb->setValue(0);
+	int h,s,v;
+	this->colorDialog->currentColor().getHsv(&h,&s,&v);
+	this->colorDialog->setCurrentColor(QColor::fromHsv(h,s,0));
 }
 
 

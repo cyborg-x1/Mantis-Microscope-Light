@@ -34,6 +34,7 @@
 			</target>
 		</buildTargets>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry">
 		<pathentry base-path="/opt/Qt/Desktop/Qt/474/gcc/include" include="" kind="inc" path="" system="true"/>
 		<pathentry base-path="/opt/Qt/Desktop/Qt/474/gcc/include" include="QtDBus" kind="inc" path="" system="true"/>
@@ -57,5 +58,8 @@
 		<pathentry base-path="/opt/Qt/Desktop/Qt/474/gcc/include" include="QtNetwork" kind="inc" path="" system="true"/>
 		<pathentry base-path="/opt/Qt/Desktop/Qt/474/gcc/include" include="QtXmlPatterns" kind="inc" path="" system="true"/>
 		<pathentry base-path="/opt/Qt/Desktop/Qt/474/gcc/include" include="QtSql" kind="inc" path="" system="true"/>
+		<pathentry include="/usr/include" kind="inc" path="" system="true"/>
+		<pathentry kind="src" path=""/>
+		<pathentry kind="out" path=""/>
 	</storageModule>
 </cproject>

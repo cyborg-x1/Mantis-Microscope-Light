@@ -9,9 +9,11 @@
 #define MICROSCOPECONNECTOR_H_
 
 #include <QThread>
+#include <QString>
 #include "qext/qextserialport.h"
 #include "qext/qextserialport_global.h"
 #include "qext/qextserialenumerator.h"
+#include <ftdi.hpp>
 
 class MicroScopeConnector : public QThread
 {

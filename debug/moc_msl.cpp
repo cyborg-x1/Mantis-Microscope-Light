@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'msl.h'
 **
-** Created: Thu Dec 1 10:09:07 2011
+** Created: Sat Dec 3 19:50:28 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_msl[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,15 +36,14 @@ static const uint qt_meta_data_msl[] = {
       61,    4,    4,    4, 0x08,
       91,    4,    4,    4, 0x08,
      125,  119,    4,    4, 0x08,
-     165,  119,    4,    4, 0x08,
-     204,  119,    4,    4, 0x08,
-     246,    4,    4,    4, 0x08,
-     277,    4,    4,    4, 0x08,
-     309,    4,    4,    4, 0x08,
-     347,    4,    4,    4, 0x08,
-     382,    4,    4,    4, 0x08,
-     414,    4,    4,    4, 0x08,
-     446,    4,    4,    4, 0x08,
+     164,  119,    4,    4, 0x08,
+     206,    4,    4,    4, 0x08,
+     237,    4,    4,    4, 0x08,
+     269,    4,    4,    4, 0x08,
+     307,    4,    4,    4, 0x08,
+     342,    4,    4,    4, 0x08,
+     374,    4,    4,    4, 0x08,
+     406,    4,    4,    4, 0x08,
 
        0        // eod
 };
@@ -54,7 +53,6 @@ static const char qt_meta_stringdata_msl[] = {
     "on_pushButton_Wmax_clicked()\0"
     "on_pushButton_UVmax_clicked()\0"
     "on_pushButton_off_clicked()\0value\0"
-    "on_verticalSlider_rgb_valueChanged(int)\0"
     "on_verticalSlider_uv_valueChanged(int)\0"
     "on_verticalSlider_white_valueChanged(int)\0"
     "on_pushButton_EEPROM_clicked()\0"
@@ -99,19 +97,18 @@ int msl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 1: on_pushButton_Wmax_clicked(); break;
         case 2: on_pushButton_UVmax_clicked(); break;
         case 3: on_pushButton_off_clicked(); break;
-        case 4: on_verticalSlider_rgb_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: on_verticalSlider_uv_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: on_verticalSlider_white_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 7: on_pushButton_EEPROM_clicked(); break;
-        case 8: on_pushButton_RGB_off_clicked(); break;
-        case 9: on_pushButton_UV_White_Tggl_clicked(); break;
-        case 10: on_pushButton_UvWhiteOff_clicked(); break;
-        case 11: on_pushButton_EE_Save_clicked(); break;
-        case 12: on_pushButton_EE_Read_clicked(); break;
-        case 13: on_pushButton_EE_currentSetting_clicked(); break;
+        case 4: on_verticalSlider_uv_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: on_verticalSlider_white_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: on_pushButton_EEPROM_clicked(); break;
+        case 7: on_pushButton_RGB_off_clicked(); break;
+        case 8: on_pushButton_UV_White_Tggl_clicked(); break;
+        case 9: on_pushButton_UvWhiteOff_clicked(); break;
+        case 10: on_pushButton_EE_Save_clicked(); break;
+        case 11: on_pushButton_EE_Read_clicked(); break;
+        case 12: on_pushButton_EE_currentSetting_clicked(); break;
         default: ;
         }
-        _id -= 14;
+        _id -= 13;
     }
     return _id;
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'msl.ui'
 **
-** Created: Thu Dec 1 10:09:01 2011
+** Created: Sat Dec 3 11:41:32 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -34,9 +34,6 @@ public:
     QGroupBox *groupBox_RGBLEDs;
     QGridLayout *gridLayout_3;
     QVBoxLayout *LayoutForColorSelector;
-    QLabel *label_3;
-    QSlider *verticalSlider_rgb;
-    QLabel *label_4;
     QPushButton *pushButton_RGB_off;
     QPushButton *pushButton_off;
     QGroupBox *groupBox_EEProm;
@@ -78,29 +75,12 @@ public:
         LayoutForColorSelector->setSpacing(6);
         LayoutForColorSelector->setObjectName(QString::fromUtf8("LayoutForColorSelector"));
 
-        gridLayout_3->addLayout(LayoutForColorSelector, 1, 0, 1, 1);
-
-        label_3 = new QLabel(groupBox_RGBLEDs);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-
-        gridLayout_3->addWidget(label_3, 0, 0, 1, 1);
-
-        verticalSlider_rgb = new QSlider(groupBox_RGBLEDs);
-        verticalSlider_rgb->setObjectName(QString::fromUtf8("verticalSlider_rgb"));
-        verticalSlider_rgb->setMaximum(255);
-        verticalSlider_rgb->setOrientation(Qt::Vertical);
-
-        gridLayout_3->addWidget(verticalSlider_rgb, 1, 1, 1, 1);
-
-        label_4 = new QLabel(groupBox_RGBLEDs);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-
-        gridLayout_3->addWidget(label_4, 0, 1, 1, 1);
+        gridLayout_3->addLayout(LayoutForColorSelector, 0, 0, 1, 2);
 
         pushButton_RGB_off = new QPushButton(groupBox_RGBLEDs);
         pushButton_RGB_off->setObjectName(QString::fromUtf8("pushButton_RGB_off"));
 
-        gridLayout_3->addWidget(pushButton_RGB_off, 2, 1, 1, 1);
+        gridLayout_3->addWidget(pushButton_RGB_off, 1, 0, 1, 2);
 
 
         gridLayout->addWidget(groupBox_RGBLEDs, 0, 0, 1, 2);
@@ -185,7 +165,9 @@ public:
 
         spinBox_white = new QSpinBox(groupBox_UVLEDs);
         spinBox_white->setObjectName(QString::fromUtf8("spinBox_white"));
+        spinBox_white->setWrapping(false);
         spinBox_white->setMaximum(255);
+        spinBox_white->setValue(0);
 
         gridLayout_2->addWidget(spinBox_white, 2, 2, 1, 1);
 
@@ -231,8 +213,6 @@ public:
     {
         mslClass->setWindowTitle(QApplication::translate("mslClass", "MicroScope LightControl", 0, QApplication::UnicodeUTF8));
         groupBox_RGBLEDs->setTitle(QApplication::translate("mslClass", "RGB LEDs", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("mslClass", "Color", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("mslClass", "Brightness", 0, QApplication::UnicodeUTF8));
         pushButton_RGB_off->setText(QApplication::translate("mslClass", "RGB off", 0, QApplication::UnicodeUTF8));
         pushButton_off->setText(QApplication::translate("mslClass", "Off", 0, QApplication::UnicodeUTF8));
         groupBox_EEProm->setTitle(QApplication::translate("mslClass", "EEPROM", 0, QApplication::UnicodeUTF8));

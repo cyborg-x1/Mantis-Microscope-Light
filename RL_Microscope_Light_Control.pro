@@ -16,3 +16,4 @@ SOURCES += MicroScopeConnector.cpp \
     msl.cpp
 FORMS += msl.ui
 RESOURCES += 
+LIBS += /usr/lib/x86_64-linux-gnu/libudev.so
