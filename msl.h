@@ -5,7 +5,7 @@
 #include <QColorDialog>
 #include <qdebug.h>
 #include "ui_msl.h"
-#include "MicroScopeConnector.h"
+#include "qLinuxFtdiSerialAutoConnector/QLinuxFtdiSerialAutoConnector.h"
 
 class msl : public QWidget
 {

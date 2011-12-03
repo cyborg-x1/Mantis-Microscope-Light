@@ -20,7 +20,6 @@ msl::msl(QWidget *parent)
     //Hide the EEProm settings-box
     this->ui.groupBox_EEProm->hide();
 
-    MicroScopeConnector t;
 }
 
 msl::~msl()
