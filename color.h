@@ -72,9 +72,9 @@ void copyColorArray(const uint8_t *from_array, uint8_t *to_array);
 ISR(USART0_RX_vect);
 
 /**
- * ISR for timeout
+ * ISR for serial command timeout
  */
-
+ISR(TIMER2_COMPB_vect);
 
 
 #endif /* COLOR_H_ */

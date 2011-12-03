@@ -17,7 +17,9 @@ uint8_t curlight[]={0,0,0,0,0};
 //variable for a new light situation
 uint8_t newlight[]={0,0,0,0,0};
 
-
+//variables for timing
+uint8_t time_6us4=0;
+uint16_t time_ms=0;
 
 uint8_t setColors(volatile uint8_t uv, uint8_t w, uint8_t r, uint8_t g, uint8_t b)
 {
@@ -84,7 +86,6 @@ uint8_t setColorMEMFromArray(uint8_t addr, const uint8_t *arr)
 	}
 	return 0;
 }
-
 
 uint8_t ColorMEMToAArray(uint8_t addr, uint8_t *arr)
 {
@@ -168,29 +169,46 @@ void copyColorArray(const uint8_t *from_array, uint8_t *to_array)
 
 ISR(USART0_RX_vect)
 {
+	//TODO RESET TIMER VARS
+	//TODO TIMER INT ON
 
 	command_buffer[command_len]=UDR0;
 	if(command_len>=8)
 	{
+		//TODO TIMER INT OFF
 		switch(command_buffer[0])
 		{
-		//Write
-		case 'W':
-		{
-			command_buffer[2]=0;//TODO REMOVE!!!
-			uint8_t err=ColorMEMToAArray(command_buffer[1],command_buffer+2);
-			if(!err)
-			    uart_sendByte('A');
-			else
-				uart_sendByte('N');
-		}
-		break;
-		//Read MEM
-		case 'R':
+			//Write
+			case 'W':
+			{
+				command_buffer[2]=0;//TODO REMOVE!!!
 
+				//Write color(5 bytes from byte 2) to given address (byte 1)
+				uint8_t err=ColorMEMToAArray(command_buffer[1],command_buffer+2);
+				if(!err)
+				{
+					uart_sendByte('A');
+					for (int col = 0; col < 5; ++col)
+					{
+						uart_sendByte(command_buffer[col+2]);
+					}
+				}
+				else
+				{
+					uart_sendByte('N');
+				}
+			}
 			break;
-		default:
-			uart_sendByte('N');
+
+			//Read MEM
+			case 'R':
+			{
+				uint8_t err=ColorMEMToAArray(command_buffer[1],command_buffer+2);
+				if(!err)
+					uart_sendByte('A');
+				else
+					uart_sendByte('N');
+			}
 			break;
 		}
 		command_len=0;
@@ -200,3 +218,21 @@ ISR(USART0_RX_vect)
 		command_len++;
 	}
 }
+
+
+ISR(TIMER2_COMPB_vect)
+{
+	time_6us4++;
+	if(time_6us4>=156)
+	{
+		time_6us4=0;
+		time_ms++;
+	}
+	if(time_ms>=100)//timeout 100ms
+	{
+		time_ms=0;
+		command_len=0;
+		//TODO TIMER INT OFF
+	}
+}
+
