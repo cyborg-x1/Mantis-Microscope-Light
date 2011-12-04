@@ -5,14 +5,12 @@ QT += core \
     xml
 HEADERS += qLinuxUSBSerialAutoConnector/qlinuxUSBserialautoconnectorgui.h \
     qLinuxUSBSerialAutoConnector/QLinuxUSBSerialAutoConnector.h \
-    MicroScopeConnector.h \
     qext/qextserialenumerator.h \
     qext/qextserialport.h \
     qext/qextserialport_global.h \
     msl.h
 SOURCES += qLinuxUSBSerialAutoConnector/QLinuxUSBSerialAutoConnector.cpp \
     qLinuxUSBSerialAutoConnector/qlinuxUSBserialautoconnectorgui.cpp \
-    MicroScopeConnector.cpp \
     qext/posix_qextserialport.cpp \
     qext/qextserialenumerator_unix.cpp \
     qext/qextserialport.cpp \

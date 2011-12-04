@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qlinuxUSBserialautoconnectorgui.ui'
 **
-** Created: Sun Dec 4 15:02:44 2011
+** Created: Sun Dec 4 21:53:42 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
