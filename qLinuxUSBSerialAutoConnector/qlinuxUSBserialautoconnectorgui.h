@@ -1,6 +1,7 @@
 #ifndef QLINUXUSBSERIALAUTOCONNECTORGUI_H
 #define QLINUXUSBSERIALAUTOCONNECTORGUI_H
 
+#include <QTimer>
 #include <QtGui/QDialog>
 #include "../ui_qlinuxUSBserialautoconnectorgui.h"
 
@@ -14,21 +15,28 @@ public:
 
 private:
     Ui::QLinuxUSBSerialAutoConnectorGUIClass ui;
+    QTimer countDownSeconds;
+
 
 public:
     Ui::QLinuxUSBSerialAutoConnectorGUIClass* getUI();
     void setRetrySeconds(int seconds);
     void setDeviceName(QString text);
+    void hide();
+    void show();
+
+private slots:
+	void countdown();
+	void on_pushButton_retry_clicked();
+	void on_pushButton_abort_clicked();
 
 public slots:
-
-void on_pushbutton_retry_clicked();
-void on_pushbutton_abort_clicked();
 void secondsvalue(int secondsTillRetry);
 
+
 signals:
-	void retry_click();
-	void abort_click();
+	void retry();
+	void abort();
 };
 
 #endif // QLINUXUSBSERIALAUTOCONNECTORGUI_H
