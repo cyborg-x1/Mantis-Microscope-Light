@@ -20,6 +20,8 @@ msl::msl(QWidget *parent)
     //Hide the EEProm settings-box
     this->ui.groupBox_EEProm->hide();
 
+    connector.start();
+
 }
 
 msl::~msl()
@@ -43,6 +45,7 @@ void msl::colorChanged (const QColor & color)
 void msl::on_pushButton_Wmax_clicked()
 {
 	this->ui.verticalSlider_white->setValue(255);
+	connector.quit();
 }
 
 void msl::on_pushButton_UVmax_clicked()

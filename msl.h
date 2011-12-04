@@ -18,6 +18,7 @@ class msl : public QWidget
 
 	private:
 		Ui::mslClass ui;
+	    qFtdi::QLinuxFtdiSerialAutoConnector connector;
 
 
 	void updateLEDs();

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qlinuxftdiserialautoconnectorgui.h'
 **
-** Created: Sat Dec 3 21:35:49 2011
+** Created: Sun Dec 4 02:24:20 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!

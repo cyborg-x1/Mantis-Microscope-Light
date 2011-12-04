@@ -7,9 +7,8 @@ QLinuxFtdiSerialAutoConnectorGUI::QLinuxFtdiSerialAutoConnectorGUI(QWidget *pare
 }
 
 QLinuxFtdiSerialAutoConnectorGUI::~QLinuxFtdiSerialAutoConnectorGUI()
-{
+{}
 
-}
 Ui::QLinuxFtdiSerialAutoConnectorGUIClass* QLinuxFtdiSerialAutoConnectorGUI::getUI()
 {
 	return &this->ui;
