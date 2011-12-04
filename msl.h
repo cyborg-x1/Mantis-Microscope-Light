@@ -5,7 +5,7 @@
 #include <QColorDialog>
 #include <qdebug.h>
 #include "ui_msl.h"
-#include "qLinuxFtdiSerialAutoConnector/QLinuxFtdiSerialAutoConnector.h"
+#include "qLinuxUSBSerialAutoConnector/QLinuxUSBSerialAutoConnector.h"
 
 class msl : public QWidget
 {
@@ -18,7 +18,7 @@ class msl : public QWidget
 
 	private:
 		Ui::mslClass ui;
-	    qFtdi::QLinuxFtdiSerialAutoConnector connector;
+	    qUSB::QLinuxUSBSerialAutoConnector connector;
 
 
 	void updateLEDs();
