@@ -14,10 +14,9 @@
 #include <QReadWriteLock>
 #include "qlinuxUSBserialautoconnectorgui.h"
 #include <qdebug.h>
-#include "../qext/qextserialport.h"
 
 
-namespace qUSB
+namespace qUSBSerial
 {
 
 class QLinuxUSBSerialAutoConnector: public QThread
@@ -25,19 +24,27 @@ class QLinuxUSBSerialAutoConnector: public QThread
 	Q_OBJECT
 
 public:
-	QLinuxUSBSerialAutoConnector(QWidget *parent=0, QString vid="", QString pid="", QString serial="", QString manufacturer="",QString product="", unsigned int retryseconds=10);
+	QLinuxUSBSerialAutoConnector(QString vid="", QString pid="", QString serial="", QString manufacturer="",QString product="");
 	virtual ~QLinuxUSBSerialAutoConnector();
 
 public:
+	/**
+	 * This enum holds the abort codes transmitted from the abort signal
+	 */
 	typedef enum
 	{
 		USER_ABORT=-1,
-		UDEV_CREATION_ERROR=-1000
+		UDEV_CREATION_ERROR=-2,
+		OPEN_DEV_FILE_FAILED=-3,
 	}AbortReason_t;
 
 
 
 private:
+
+	/*
+	 *	internal states
+	 */
 	typedef enum
 	{
 		Disconnect,
@@ -52,7 +59,6 @@ private:
 	//Seconds to wait till auto retry
 	bool retry;
 	bool abort;
-	QLinuxUSBSerialAutoConnectorGUI gui;
 
 	//State
 	bool establish_connection;
@@ -66,12 +72,18 @@ private:
 	QString pid;
 
 	//SerialFile
-	QextSerialPort *serialPortHandler;
 	QString devFile;
 
 
 private slots:
+	/*
+	 * Thread "main"
+	 */
 	void ifaceManagement();
+
+	/*
+	 * This function searches for the special serial interface
+	 */
 	bool searchSerial();
 
 public:
@@ -84,12 +96,14 @@ public slots:
 	void serialDisconnect();
 	void retryConnect();
 	void abortConnect();
+
 signals:
 	void serialConnectionLost();
 	void serialDisconnected();
 	void serialConnected();
 	void serialReconnected();
 	void abortConnect(AbortReason_t reason);
+	void waitingForRetry();
 
 };
 

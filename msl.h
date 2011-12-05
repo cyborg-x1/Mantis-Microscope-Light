@@ -18,7 +18,7 @@ class msl : public QWidget
 
 	private:
 		Ui::mslClass ui;
-	    qUSB::QLinuxUSBSerialAutoConnector connector;
+	    qUSBSerial::QLinuxUSBSerialAutoConnector connector;
 
 
 	void updateLEDs();

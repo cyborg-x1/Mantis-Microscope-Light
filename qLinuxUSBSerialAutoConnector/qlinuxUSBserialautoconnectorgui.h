@@ -10,7 +10,7 @@ class QLinuxUSBSerialAutoConnectorGUI : public QDialog
     Q_OBJECT
 
 public:
-    QLinuxUSBSerialAutoConnectorGUI(QWidget *parent = 0);
+    QLinuxUSBSerialAutoConnectorGUI(QWidget *parent = 0, unsigned int SecondsTillAutoRetry=10, QString DeviceName="USB Serial Adapter");
     ~QLinuxUSBSerialAutoConnectorGUI();
 
 private:
@@ -22,8 +22,7 @@ public:
     Ui::QLinuxUSBSerialAutoConnectorGUIClass* getUI();
     void setRetrySeconds(int seconds);
     void setDeviceName(QString text);
-    void hide();
-    void show();
+
 
 private slots:
 	void countdown();
@@ -31,7 +30,6 @@ private slots:
 	void on_pushButton_abort_clicked();
 
 public slots:
-void secondsvalue(int secondsTillRetry);
 
 
 signals:

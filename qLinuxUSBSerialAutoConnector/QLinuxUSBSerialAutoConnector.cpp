@@ -13,9 +13,9 @@
 	#define NULL 0
 #endif
 
-namespace qUSB
+namespace qUSBSerial
 {
-	QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QWidget *parent, QString vid, QString pid, QString serial, QString manufacturer,QString product, unsigned int retryseconds)
+	QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QString vid, QString pid, QString serial, QString manufacturer,QString product)
 	{
 		//Initialize the variables...
 		this->manufacturer=manufacturer;
@@ -27,19 +27,13 @@ namespace qUSB
 		this->state=Disconnected;
 		this->establish_connection=true;
 		this->abort=false;
-		this->gui.setRetrySeconds(retryseconds);
-		if(parent)
-		{
-			this->gui.setParent(parent,Qt::Dialog);
-		}
-		connect(&this->gui,SIGNAL(retry()),this,SLOT(retryConnect()));
-		connect(&this->gui,SIGNAL(abort()),this,SLOT(abortConnect()));
 	}
 
 	QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
 	{
+
 		quit();
-		delete serialPortHandler;
+		wait();
 	}
 
 	void QLinuxUSBSerialAutoConnector::run()
@@ -48,27 +42,16 @@ namespace qUSB
 		connect(&timer1,SIGNAL(timeout()),this,SLOT(ifaceManagement()));
 		timer1.start(50);
 		exec();
-		this->gui.hide();
 	}
 
 	void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	{
-		if(this->state!=WaitForRetry)
-		{
-			//Be sure the GUI is not visible when it shouldn't be.
-			this->gui.hide();
-		}
-
 		switch(this->state)
 		{
 			case Disconnect:
 			{
 				qDebug()<<"State:Disconnect";
-				if(0)
-				{
-					this->serialPortHandler->close();
-					delete this->serialPortHandler;
-				}
+
 			}
 			break;
 			case Disconnected:
@@ -82,19 +65,7 @@ namespace qUSB
 				qDebug()<<"State:Connect";
 				if(establish_connection==true)
 				{
-					this->serialPortHandler=new QextSerialPort(this->devFile);
-					while(!this->serialPortHandler->open(QIODevice::ReadWrite))//Retry as long as user wants to...
-					{
-						//TODO msgbox could not open serial device
-						//Retry
-						//Abort:
-						// Delete
-						// ->Disconnected
-					}
-					if(this->serialPortHandler->isOpen())
-					{
-						this->state=Connected;
-					}
+
 				}
 				else
 				{
@@ -107,7 +78,16 @@ namespace qUSB
 				qDebug()<<"State:Connected";
 				if(establish_connection==true)
 				{
+					QString currentDevice=devFile;
+					if(searchSerial())
+					{
 
+					}
+					else
+					{
+						this->state=WaitForRetry;
+						emit serialConnectionLost();
+					}
 				}
 				else
 				{
@@ -139,11 +119,8 @@ namespace qUSB
 			case WaitForRetry:
 			{
 				qDebug()<<"State:WaitforRetry";
-
-
-
 				//Check if we got the signal for retrying it
-				this->lock.lockForRead();
+				this->lock.lockForWrite();
 				if(this->retry==true)
 				{
 					this->state=SearchSerial;
@@ -156,7 +133,7 @@ namespace qUSB
 				}
 				else
 				{
-					gui.show();
+					emit waitingForRetry();
 				}
 				this->lock.unlock();
 

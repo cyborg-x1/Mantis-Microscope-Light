@@ -1,7 +1,7 @@
 #include "msl.h"
 
 msl::msl(QWidget *parent)
-    : QWidget(parent), connector(this)
+    : QWidget(parent), connector()
 {
 	ui.setupUi(this);
 	//Create QColorDialog
