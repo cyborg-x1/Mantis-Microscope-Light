@@ -42,6 +42,7 @@ class msl : public QWidget
 
 		void serialConnected();
 		void serialWaitingForRetry();
+		void serialConnectionAbort(int reason);
 
 	signals:
 		void retry();

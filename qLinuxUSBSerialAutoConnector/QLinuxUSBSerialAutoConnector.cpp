@@ -36,6 +36,7 @@ QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QString vid,
 	this->vid = vid;
 	this->pid = pid;
 	this->state = Disconnected;
+	this->establish_connection=false;
 	this->abort = false;
 	this->retry = false;
 	this->baudrate = baudrate;
@@ -43,6 +44,7 @@ QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QString vid,
 	this->parity = parity;
 	this->chrsize = chrsize;
 	this->handshake = handshake;
+	this->fd=-1;
 }
 
 QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
@@ -67,14 +69,15 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	case Disconnect:
 	{
 		qDebug() << "State:Disconnect";
-
+		this->closeInterface();
+		this->state=Disconnected;
+		emit this->serialDisconnect();
 	}
 		break;
 	case Disconnected:
 	{
 		qDebug() << "State:Disconnected";
-		if (establish_connection == true)
-			this->state = SearchSerial;
+		if (establish_connection == true) this->state = SearchSerial;
 	}
 		break;
 	case Connect:
@@ -82,7 +85,15 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 		qDebug() << "State:Connect";
 		if (establish_connection == true)
 		{
-			emit serialConnected();
+			if(openInterface())
+			{
+				//Error
+				this->state=Disconnected;
+			}
+			else
+			{
+				emit serialConnected();
+			}
 		}
 		else
 		{
@@ -183,7 +194,7 @@ bool QLinuxUSBSerialAutoConnector::searchSerial()
 	if (!udev)
 	{
 		//TODO msgbox There was an error when trying to create a udev object
-		emit abortConnect(UDEV_CREATION_ERROR);
+		emit serialAbortedConnect(UDEV_CREATION_ERROR);
 		qDebug() << "UDEV ERROR!";
 	}
 
@@ -276,8 +287,9 @@ void QLinuxUSBSerialAutoConnector::serialDisconnect()
 
 void QLinuxUSBSerialAutoConnector::retryConnect()
 {
+
 	this->lock.lockForWrite();
-	this->retry = true;
+	if(waitingforRetryEmitted==true)this->retry = true;
 	this->lock.unlock();
 }
 
@@ -293,6 +305,7 @@ void QLinuxUSBSerialAutoConnector::abortConnect()
  */
 bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 {
+	if(fd<0)return 0;
 	struct termios newtio;
 	speed_t br;
 
@@ -425,6 +438,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	if (tcsetattr(this->fd, TCSANOW, &newtio) != 0)
 	{
 		qDebug() << "tcsetattr() 1 failed";
+		return 1;
 	}
 
 	int mcs = 0;
@@ -434,7 +448,8 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 
 	if (tcgetattr(fd, &newtio) != 0)
 	{
-		qDebug() << "tcgetattr() 4 failed";
+		qDebug() << "tcgetattr() 2 failed";
+		return 2;
 	}
 
 	//hardware handshake
@@ -450,7 +465,8 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 
 	if (tcsetattr(fd, TCSANOW, &newtio) != 0)
 	{
-		qDebug() << "tcsetattr() 2 failed";
+		qDebug() << "tcsetattr() 3 failed";
+		return 3;
 	}
 
 	return 0;
@@ -461,7 +477,7 @@ bool QLinuxUSBSerialAutoConnector::openInterface()
    fd=open(devFile.toLatin1(), O_RDWR | O_NDELAY);
    if (fd<0)
    {
-	   emit this->abortConnect(OPEN_DEV_FILE_FAILED);
+	   emit serialAbortedConnect(OPEN_DEV_FILE_FAILED);
 	   this->fd=-1;
 	   return 1;
    }
@@ -469,15 +485,43 @@ bool QLinuxUSBSerialAutoConnector::openInterface()
 
    if(updateSerialSettings())
    {
-	   emit this->abortConnect(APPLY_SETTINGS_FAILED);
+	   emit serialAbortedConnect(APPLY_SETTINGS_FAILED);
 	   close(this->fd);
+	   this->fd=-1;
 	   return 2;
    }
 
-
-
    return 0;
 }
+
+void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
+{
+	this->baudrate = baudrate;
+
+	updateSerialSettings();
+}
+void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
+{
+	this->stopbits = stopbits;
+	updateSerialSettings();
+}
+void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
+{
+	this->parity = parity;
+	updateSerialSettings();
+}
+void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
+{
+	this->chrsize = chrsize;
+	updateSerialSettings();
+}
+void QLinuxUSBSerialAutoConnector::setHandShake(handshake_t handshake)
+{
+	this->handshake = handshake;
+	updateSerialSettings();
+}
+
+
 
 void QLinuxUSBSerialAutoConnector::closeInterface()
 {

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'QLinuxUSBSerialAutoConnector.h'
 **
-** Created: Tue Dec 6 21:32:58 2011
+** Created: Tue Dec 6 23:21:57 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -33,20 +33,20 @@ static const uint qt_meta_data_qUSBSerial__QLinuxUSBSerialAutoConnector[] = {
  // signals: signature, parameters, type, tag, flags
       42,   41,   41,   41, 0x05,
       63,   41,   41,   41, 0x05,
-      88,   81,   41,   41, 0x05,
-     116,   41,   41,   41, 0x05,
-     134,   41,   41,   41, 0x05,
+      81,   41,   41,   41, 0x05,
+     107,   41,   41,   41, 0x05,
+     125,   41,   41,   41, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-     157,   41,   41,   41, 0x08,
-     180,   41,  175,   41, 0x08,
-     195,   41,  175,   41, 0x08,
-     218,   41,  175,   41, 0x08,
-     234,   41,   41,   41, 0x08,
-     251,   41,   41,   41, 0x0a,
-     267,   41,   41,   41, 0x0a,
-     286,   41,   41,   41, 0x0a,
-     301,   41,   41,   41, 0x0a,
+     148,   41,   41,   41, 0x08,
+     171,   41,  166,   41, 0x08,
+     186,   41,  166,   41, 0x08,
+     209,   41,  166,   41, 0x08,
+     225,   41,   41,   41, 0x08,
+     242,   41,   41,   41, 0x0a,
+     258,   41,   41,   41, 0x0a,
+     277,   41,   41,   41, 0x0a,
+     292,   41,   41,   41, 0x0a,
 
        0        // eod
 };
@@ -54,13 +54,12 @@ static const uint qt_meta_data_qUSBSerial__QLinuxUSBSerialAutoConnector[] = {
 static const char qt_meta_stringdata_qUSBSerial__QLinuxUSBSerialAutoConnector[] = {
     "qUSBSerial::QLinuxUSBSerialAutoConnector\0"
     "\0serialDisconnected()\0serialConnected()\0"
-    "reason\0abortConnect(AbortReason_t)\0"
-    "waitingForRetry()\0serialConnectionLost()\0"
-    "ifaceManagement()\0bool\0searchSerial()\0"
-    "updateSerialSettings()\0openInterface()\0"
-    "closeInterface()\0serialConnect()\0"
-    "serialDisconnect()\0retryConnect()\0"
-    "abortConnect()\0"
+    "serialAbortedConnect(int)\0waitingForRetry()\0"
+    "serialConnectionLost()\0ifaceManagement()\0"
+    "bool\0searchSerial()\0updateSerialSettings()\0"
+    "openInterface()\0closeInterface()\0"
+    "serialConnect()\0serialDisconnect()\0"
+    "retryConnect()\0abortConnect()\0"
 };
 
 const QMetaObject qUSBSerial::QLinuxUSBSerialAutoConnector::staticMetaObject = {
@@ -94,7 +93,7 @@ int qUSBSerial::QLinuxUSBSerialAutoConnector::qt_metacall(QMetaObject::Call _c, 
         switch (_id) {
         case 0: serialDisconnected(); break;
         case 1: serialConnected(); break;
-        case 2: abortConnect((*reinterpret_cast< AbortReason_t(*)>(_a[1]))); break;
+        case 2: serialAbortedConnect((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 3: waitingForRetry(); break;
         case 4: serialConnectionLost(); break;
         case 5: ifaceManagement(); break;
@@ -129,7 +128,7 @@ void qUSBSerial::QLinuxUSBSerialAutoConnector::serialConnected()
 }
 
 // SIGNAL 2
-void qUSBSerial::QLinuxUSBSerialAutoConnector::abortConnect(AbortReason_t _t1)
+void qUSBSerial::QLinuxUSBSerialAutoConnector::serialAbortedConnect(int _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);

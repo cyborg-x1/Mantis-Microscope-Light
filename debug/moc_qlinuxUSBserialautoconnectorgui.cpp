@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qlinuxUSBserialautoconnectorgui.h'
 **
-** Created: Tue Dec 6 14:11:02 2011
+** Created: Tue Dec 6 23:17:41 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!

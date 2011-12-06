@@ -173,31 +173,11 @@ public:
 	void run();
 	QString getCurrentDevFile();
 
-	void setBaudrate(baudrate_t baudrate)
-	{
-		this->baudrate = baudrate;
-		updateSerialSettings();
-	}
-	void setStopBits(stopBits_t stopbits)
-	{
-		this->stopbits = stopbits;
-		updateSerialSettings();
-	}
-	void setParity(parity_t parity)
-	{
-		this->parity = parity;
-		updateSerialSettings();
-	}
-	void setCharSize(ChrSize_t chrsize)
-	{
-		this->chrsize = chrsize;
-		updateSerialSettings();
-	}
-	void setHandShake(handshake_t handshake)
-	{
-		this->handshake = handshake;
-		updateSerialSettings();
-	}
+	void setBaudrate(baudrate_t baudrate);
+	void setStopBits(stopBits_t stopbits);
+	void setParity(parity_t parity);
+	void setCharSize(ChrSize_t chrsize);
+	void setHandShake(handshake_t handshake);
 
 public slots:
 	void serialConnect();
@@ -208,7 +188,7 @@ public slots:
 signals:
 	void serialDisconnected();
 	void serialConnected();
-	void abortConnect(AbortReason_t reason);
+	void serialAbortedConnect(int);
 	void waitingForRetry();
 	void serialConnectionLost();
 

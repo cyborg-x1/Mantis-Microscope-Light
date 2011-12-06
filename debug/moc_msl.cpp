@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'msl.h'
 **
-** Created: Tue Dec 6 21:32:59 2011
+** Created: Tue Dec 6 23:21:58 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_msl[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -49,6 +49,7 @@ static const uint qt_meta_data_msl[] = {
      414,    4,    4,    4, 0x08,
      456,    4,    4,    4, 0x08,
      474,    4,    4,    4, 0x08,
+     505,  498,    4,    4, 0x08,
 
        0        // eod
 };
@@ -68,6 +69,7 @@ static const char qt_meta_stringdata_msl[] = {
     "on_pushButton_EE_Read_clicked()\0"
     "on_pushButton_EE_currentSetting_clicked()\0"
     "serialConnected()\0serialWaitingForRetry()\0"
+    "reason\0serialConnectionAbort(int)\0"
 };
 
 const QMetaObject msl::staticMetaObject = {
@@ -115,9 +117,10 @@ int msl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 13: on_pushButton_EE_currentSetting_clicked(); break;
         case 14: serialConnected(); break;
         case 15: serialWaitingForRetry(); break;
+        case 16: serialConnectionAbort((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 16;
+        _id -= 17;
     }
     return _id;
 }

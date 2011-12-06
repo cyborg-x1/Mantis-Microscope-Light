@@ -1,39 +1,49 @@
 #include "msl.h"
 
-msl::msl(QWidget *parent)
-    : QWidget(parent), serialConnection()
+msl::msl(QWidget *parent) :
+		QWidget(parent), serialConnection()
 {
 	ui.setupUi(this);
 	//Create QColorDialog
-	this->colorDialog=new QColorDialog(this);
+	this->colorDialog = new QColorDialog(this);
 	this->colorDialog->setWindowFlags(Qt::Widget);
 
 	//Remove buttons and dialog
-	this->colorDialog->setOptions(QColorDialog::DontUseNativeDialog|QColorDialog::NoButtons);
+	this->colorDialog->setOptions(
+			QColorDialog::DontUseNativeDialog | QColorDialog::NoButtons);
 	//SetColor
 	this->colorDialog->setCurrentColor(QColor(Qt::black));
 	this->ui.LayoutForColorSelector->addWidget(colorDialog);
 
 	//Connect the colorChanged signal
-    connect(this->colorDialog,SIGNAL(currentColorChanged(QColor)),this,SLOT(colorChanged(QColor)));
+	connect(this->colorDialog, SIGNAL(currentColorChanged(QColor)), this,
+			SLOT(colorChanged(QColor)));
 
-    //Hide the EEProm settings-box
-    this->ui.groupBox_EEProm->hide();
+	//Hide the EEProm settings-box
+	this->ui.groupBox_EEProm->hide();
 
-    //Disable the GUI as long as there is no connection to the serial
-    this->setDisabled(1);
+	//Disable the GUI as long as there is no connection to the serial
+	this->setDisabled(1);
 
-    //Connect the signals
-    connect(&this->serialConnection, SIGNAL(waitingForRetry()),this,SLOT(serialWaitingForRetry()));
-    connect(&this->serialConnection, SIGNAL(serialConnected()),this,SLOT(serialConnected()));
-    connect(this, SIGNAL(retry()),&this->serialConnection,SLOT(retryConnect()));
+	//Connect the signals
+	connect(&this->serialConnection,
+                        SIGNAL(serialAbortedConnect(int)), this,
+                        SLOT(serialConnectionAbort(int)));
 
-    //Start serial connection thread
-    serialConnection.start();
-    serialConnection.setStopBits(qUSBSerial::StopBits_2);
+	connect(&this->serialConnection, SIGNAL(waitingForRetry()), this,
+			SLOT(serialWaitingForRetry()));
+	connect(&this->serialConnection, SIGNAL(serialConnected()), this,
+			SLOT(serialConnected()));
+	connect(this, SIGNAL(retry()), &this->serialConnection,
+			SLOT(retryConnect()));
 
-    //Connect to Microscope Light
-    serialConnection.serialConnect();
+
+	//Start serial connection thread
+	serialConnection.start();
+	serialConnection.setStopBits(qUSBSerial::StopBits_2);
+
+	//Connect to Microscope Light
+	serialConnection.serialConnect();
 }
 
 msl::~msl()
@@ -41,13 +51,13 @@ msl::~msl()
 
 }
 
-void msl::colorChanged (const QColor & color)
+void msl::colorChanged(const QColor & color)
 {
 	//Get RGB values of the current color
-	int r,g,b,h,s,v;
+	int r, g, b, h, s, v;
 
-	color.getRgb( &r, &g, &b);
-	color.getHsv(&h,&s,&v);
+	color.getRgb(&r, &g, &b);
+	color.getHsv(&h, &s, &v);
 
 	updateLEDs();
 }
@@ -65,60 +75,64 @@ void msl::on_pushButton_UVmax_clicked()
 void msl::on_pushButton_off_clicked()
 {
 
-	this->colorDialog->setCurrentColor(QColor::fromHsv(0,0,0));
+	this->colorDialog->setCurrentColor(QColor::fromHsv(0, 0, 0));
 	this->ui.verticalSlider_uv->setValue(0);
 	this->ui.verticalSlider_white->setValue(0);
 }
 
 void msl::on_verticalSlider_uv_valueChanged(int value)
 {
-	if(value)this->ui.verticalSlider_white->setValue(0);
+	if (value)
+		this->ui.verticalSlider_white->setValue(0);
 	updateLEDs();
 }
 
 void msl::on_verticalSlider_white_valueChanged(int value)
 {
-	if(value)this->ui.verticalSlider_uv->setValue(0);
+	if (value)
+		this->ui.verticalSlider_uv->setValue(0);
 	updateLEDs();
 }
 
 void msl::on_pushButton_EEPROM_clicked()
 {
-	if(this->ui.groupBox_EEProm->isHidden())
+	if (this->ui.groupBox_EEProm->isHidden())
 	{
-		ushort a=0x00AB; // "<<" Symbol
+		ushort a = 0x00AB; // "<<" Symbol
 		this->ui.groupBox_EEProm->setHidden(0);
-		this->ui.pushButton_EEPROM->setText(QString::fromUtf16(&a,1));
+		this->ui.pushButton_EEPROM->setText(QString::fromUtf16(&a, 1));
 	}
 	else
 	{
-		ushort a=0x00BB; //   ">>" Symbol
+		ushort a = 0x00BB; //   ">>" Symbol
 		this->ui.groupBox_EEProm->setHidden(1);
-		this->ui.pushButton_EEPROM->setText(QString::fromUtf16(&a,1));
+		this->ui.pushButton_EEPROM->setText(QString::fromUtf16(&a, 1));
 	}
 }
 
 void msl::on_pushButton_RGB_off_clicked()
 {
-	int h,s,v;
-	this->colorDialog->currentColor().getHsv(&h,&s,&v);
-	this->colorDialog->setCurrentColor(QColor::fromHsv(h,s,0));
+	int h, s, v;
+	this->colorDialog->currentColor().getHsv(&h, &s, &v);
+	this->colorDialog->setCurrentColor(QColor::fromHsv(h, s, 0));
 }
 
 void msl::updateLEDs()
 {
-	qDebug()<<"Updating LEDs!";
+	qDebug() << "Updating LEDs!";
 }
 
 void msl::on_pushButton_UV_White_Tggl_clicked()
 {
-	if(this->ui.verticalSlider_uv->value())
+	if (this->ui.verticalSlider_uv->value())
 	{
-		this->ui.verticalSlider_white->setValue(this->ui.verticalSlider_uv->value());
+		this->ui.verticalSlider_white->setValue(
+				this->ui.verticalSlider_uv->value());
 	}
 	else
 	{
-		this->ui.verticalSlider_uv->setValue(this->ui.verticalSlider_white->value());
+		this->ui.verticalSlider_uv->setValue(
+				this->ui.verticalSlider_white->value());
 	}
 }
 
@@ -151,16 +165,47 @@ void msl::serialConnected()
 void msl::serialWaitingForRetry()
 {
 	this->setDisabled(1);
-	QLinuxUSBSerialAutoConnectorGUI retryGUI(this,10);
-	qDebug()<<"receivedWatingForRetry";
-	int ret=retryGUI.exec();
-	if(ret)
+	QLinuxUSBSerialAutoConnectorGUI retryGUI(this, 10);
+	qDebug() << "receivedWatingForRetry";
+	int ret = retryGUI.exec();
+	if (ret)
 	{
 		emit retry();
 	}
 	else
 	{
-		this->close();
+		exit(1);
 	}
 }
 
+void msl::serialConnectionAbort(int reason)
+{
+	QMessageBox msgbox;
+	msgbox.setStandardButtons(QMessageBox::Retry | QMessageBox::Abort);
+	msgbox.setWindowTitle("Retry to connect?");
+	msgbox.setIcon(QMessageBox::Critical);
+	switch (reason)
+	{
+	case qUSBSerial::USER_ABORT:
+		//Should not happen here...
+		break;
+	case qUSBSerial::APPLY_SETTINGS_FAILED:
+		msgbox.setText("Could not apply settings to serial!");
+		break;
+	case qUSBSerial::OPEN_DEV_FILE_FAILED:
+		msgbox.setText("Could not open device! Do you have the rights to use the serial interface?");
+		break;
+	case qUSBSerial::UDEV_CREATION_ERROR:
+		msgbox.setText("Error in udev handling. Could not create udev object.");
+		break;
+	}
+	int ret=msgbox.exec();
+	if(ret==QMessageBox::Retry)
+	{
+		emit retry();
+	}
+	else
+	{
+		exit(1);
+	}
+}
