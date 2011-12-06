@@ -1,8 +1,5 @@
 /*
  * QLinuxUSBSerialAutoConnector.cpp
- *
- *  Created on: 03.12.2011
- *      Author: cyborg-x1
  */
 #include "../ui_qlinuxUSBserialautoconnectorgui.h"
 #include "QLinuxUSBSerialAutoConnector.h"
@@ -18,9 +15,6 @@
 #include <sys/select.h>
 #include <sys/fcntl.h>
 
-#ifndef NULL //<< normally not needed eclipse just wanted to piss me off
-#define NULL 0
-#endif
 
 namespace qUSBSerial
 {
@@ -55,7 +49,9 @@ QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
 
 void QLinuxUSBSerialAutoConnector::run()
 {
-	this->waitingforRetryEmitted = false;
+	this->lock.lockForWrite();
+		this->waitingforRetryEmitted = false;
+	this->lock.unlock();
 	QTimer timer1;
 	connect(&timer1, SIGNAL(timeout()), this, SLOT(ifaceManagement()));
 	timer1.start(50);
@@ -169,7 +165,6 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 			this->abort = false;
 		}
 		this->lock.unlock();
-
 	}
 		break;
 	}
@@ -287,7 +282,6 @@ void QLinuxUSBSerialAutoConnector::serialDisconnect()
 
 void QLinuxUSBSerialAutoConnector::retryConnect()
 {
-
 	this->lock.lockForWrite();
 	if(waitingforRetryEmitted==true)this->retry = true;
 	this->lock.unlock();
@@ -296,7 +290,7 @@ void QLinuxUSBSerialAutoConnector::retryConnect()
 void QLinuxUSBSerialAutoConnector::abortConnect()
 {
 	this->lock.lockForWrite();
-	this->abort = true;
+	if(waitingforRetryEmitted)this->abort = true;
 	this->lock.unlock();
 }
 
@@ -305,10 +299,15 @@ void QLinuxUSBSerialAutoConnector::abortConnect()
  */
 bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 {
-	if(fd<0)return 0;
+	if(fd<0)
+	{
+		return 0;
+	}
+
 	struct termios newtio;
 	speed_t br;
 
+	lock.lockForRead();
 	switch (this->baudrate)
 	{
 	case BAUD_0:
@@ -369,10 +368,11 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		br = B230400;
 		break;
 	}
-
+	this->lock.unlock();
 	cfsetospeed(&newtio, br);
 	cfsetispeed(&newtio, br);
 
+	this->lock.lockForRead();
 	switch (this->chrsize)
 	{
 	case ChrSize_5:
@@ -389,9 +389,10 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		newtio.c_cflag = (newtio.c_cflag & ~CSIZE) | CS8;
 		break;
 	}
-
+	this->lock.unlock();
 	newtio.c_cflag |= CLOCAL | CREAD;
 
+	this->lock.lockForRead();
 	if (this->parity == Parity_Even)
 	{
 		newtio.c_cflag |= PARENB;
@@ -404,7 +405,9 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~(PARENB | PARODD);
 	}
+	this->lock.unlock();
 
+	this->lock.lockForRead();
 	if (this->stopbits == StopBits_2)
 	{
 		newtio.c_cflag |= CSTOPB;
@@ -413,11 +416,13 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~CSTOPB;
 	}
+	this->lock.unlock();
 
 	newtio.c_iflag = IGNBRK;
 
 	newtio.c_cflag &= ~CRTSCTS;
 
+	this->lock.lockForRead();
 	//software handshake
 	if (this->handshake == HandShake_HardwareAndSoftware
 			|| this->handshake == HandShake_Software)
@@ -428,6 +433,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_iflag &= ~(IXON | IXOFF | IXANY);
 	}
+	this->lock.unlock();
 
 	newtio.c_lflag = 0;
 	newtio.c_oflag = 0;
@@ -452,6 +458,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		return 2;
 	}
 
+	this->lock.lockForRead();
 	//hardware handshake
 	if (this->handshake == HandShake_HardwareAndSoftware
 			|| this->handshake == HandShake_Hardware)
@@ -462,7 +469,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~CRTSCTS;
 	}
-
+	this->lock.unlock();
 	if (tcsetattr(fd, TCSANOW, &newtio) != 0)
 	{
 		qDebug() << "tcsetattr() 3 failed";
@@ -474,6 +481,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 
 bool QLinuxUSBSerialAutoConnector::openInterface()
 {
+
    fd=open(devFile.toLatin1(), O_RDWR | O_NDELAY);
    if (fd<0)
    {
@@ -496,32 +504,39 @@ bool QLinuxUSBSerialAutoConnector::openInterface()
 
 void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
 {
+	this->lock.lockForWrite();
 	this->baudrate = baudrate;
-
 	updateSerialSettings();
+	this->lock.unlock();
 }
 void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
 {
+	this->lock.lockForWrite();
 	this->stopbits = stopbits;
 	updateSerialSettings();
+	this->lock.unlock();
 }
 void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
 {
+	this->lock.lockForWrite();
 	this->parity = parity;
 	updateSerialSettings();
+	this->lock.unlock();
 }
 void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
 {
+	this->lock.lockForWrite();
 	this->chrsize = chrsize;
 	updateSerialSettings();
+	this->lock.unlock();
 }
 void QLinuxUSBSerialAutoConnector::setHandShake(handshake_t handshake)
 {
+	this->lock.lockForWrite();
 	this->handshake = handshake;
 	updateSerialSettings();
+	this->lock.unlock();
 }
-
-
 
 void QLinuxUSBSerialAutoConnector::closeInterface()
 {
