@@ -3,7 +3,9 @@
 
 #include <QTimer>
 #include <QtGui/QDialog>
+#include <QMessageBox>
 #include "../ui_qlinuxUSBserialautoconnectorgui.h"
+
 
 class QLinuxUSBSerialAutoConnectorGUI : public QDialog
 {
@@ -22,7 +24,11 @@ public:
     Ui::QLinuxUSBSerialAutoConnectorGUIClass* getUI();
     void setRetrySeconds(int seconds);
     void setDeviceName(QString text);
-
+    int exec()
+    {
+    	countDownSeconds.start(1000);
+    	return QDialog::exec();
+    }
 
 private slots:
 	void countdown();
@@ -30,7 +36,6 @@ private slots:
 	void on_pushButton_abort_clicked();
 
 public slots:
-
 
 signals:
 	void retry();

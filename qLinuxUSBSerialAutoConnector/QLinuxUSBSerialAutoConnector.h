@@ -59,6 +59,7 @@ private:
 	//Seconds to wait till auto retry
 	bool retry;
 	bool abort;
+	bool waitingforRetryEmitted;
 
 	//State
 	bool establish_connection;

@@ -32,13 +32,15 @@ void QLinuxUSBSerialAutoConnectorGUI::setDeviceName(QString text)
 void QLinuxUSBSerialAutoConnectorGUI::on_pushButton_retry_clicked()
 {
 	this->countDownSeconds.stop();
-	emit this->retry();
+        emit retry();
+	this->accept();
 }
 
 void QLinuxUSBSerialAutoConnectorGUI::on_pushButton_abort_clicked()
 {
 	this->countDownSeconds.stop();
-	emit this->abort();
+        emit abort();
+	this->reject();
 }
 
 void QLinuxUSBSerialAutoConnectorGUI::countdown()
@@ -51,6 +53,8 @@ void QLinuxUSBSerialAutoConnectorGUI::countdown()
 	{
 		this->ui.progressBar_time->setValue(-1);
 		this->countDownSeconds.stop();
-		emit this->retry();
+                emit retry();
+		this->accept();
 	}
 }
+

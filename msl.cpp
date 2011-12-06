@@ -1,7 +1,7 @@
 #include "msl.h"
 
 msl::msl(QWidget *parent)
-    : QWidget(parent), connector()
+    : QWidget(parent), serialConnection()
 {
 	ui.setupUi(this);
 	//Create QColorDialog
@@ -20,7 +20,16 @@ msl::msl(QWidget *parent)
     //Hide the EEProm settings-box
     this->ui.groupBox_EEProm->hide();
 
-    connector.start();
+    //Disable the GUI as long as there is no connection to the serial
+    this->setDisabled(1);
+
+    //Connect the signals
+    connect(&this->serialConnection, SIGNAL(waitingForRetry()),this,SLOT(serialWaitingForRetry()));
+    connect(&this->serialConnection, SIGNAL(serialConnected()),this,SLOT(serialConnected()));
+    connect(this, SIGNAL(retry()),&this->serialConnection,SLOT(retryConnect()));
+
+    //Start serial connection thread
+    serialConnection.start();
 }
 
 msl::~msl()
@@ -37,9 +46,7 @@ void msl::colorChanged (const QColor & color)
 	color.getHsv(&h,&s,&v);
 
 	updateLEDs();
-
 }
-
 
 void msl::on_pushButton_Wmax_clicked()
 {
@@ -94,7 +101,6 @@ void msl::on_pushButton_RGB_off_clicked()
 	this->colorDialog->setCurrentColor(QColor::fromHsv(h,s,0));
 }
 
-
 void msl::updateLEDs()
 {
 	qDebug()<<"Updating LEDs!";
@@ -132,3 +138,25 @@ void msl::on_pushButton_EE_currentSetting_clicked()
 {
 
 }
+
+void msl::serialConnected()
+{
+	this->setEnabled(1);
+}
+
+void msl::serialWaitingForRetry()
+{
+	this->setDisabled(1);
+	QLinuxUSBSerialAutoConnectorGUI retryGUI(this,10);
+	qDebug()<<"receivedWatingForRetry";
+	int ret=retryGUI.exec();
+	if(ret)
+	{
+		emit retry();
+	}
+	else
+	{
+		this->close();
+	}
+}
+

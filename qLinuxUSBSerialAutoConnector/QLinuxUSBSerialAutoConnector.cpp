@@ -4,7 +4,7 @@
  *  Created on: 03.12.2011
  *      Author: cyborg-x1
  */
-
+#include "../ui_qlinuxUSBserialautoconnectorgui.h"
 #include "QLinuxUSBSerialAutoConnector.h"
 #include <libudev.h>
 
@@ -23,21 +23,20 @@ namespace qUSBSerial
 		this->product=product;
 		this->vid=vid;
 		this->pid=pid;
-		this->retry=false;
 		this->state=Disconnected;
-		this->establish_connection=true;
 		this->abort=false;
+		this->retry=false;
 	}
 
 	QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
 	{
-
 		quit();
 		wait();
 	}
 
 	void QLinuxUSBSerialAutoConnector::run()
 	{
+		this->waitingforRetryEmitted=false;
 		QTimer timer1;
 		connect(&timer1,SIGNAL(timeout()),this,SLOT(ifaceManagement()));
 		timer1.start(50);
@@ -65,7 +64,7 @@ namespace qUSBSerial
 				qDebug()<<"State:Connect";
 				if(establish_connection==true)
 				{
-
+					emit serialConnected();
 				}
 				else
 				{
@@ -118,22 +117,28 @@ namespace qUSBSerial
 			break;
 			case WaitForRetry:
 			{
-				qDebug()<<"State:WaitforRetry";
+
+
+				//We only send WaitingForRetry on entry.
+				if(!waitingforRetryEmitted)
+				{
+					qDebug()<<"State:WaitforRetry";
+					this->waitingforRetryEmitted=true;
+					emit waitingForRetry();
+				}
 				//Check if we got the signal for retrying it
 				this->lock.lockForWrite();
 				if(this->retry==true)
 				{
+					this->waitingforRetryEmitted=false;
 					this->state=SearchSerial;
 					this->retry=false;
 				}
 				else if(this->abort==true)
 				{
+					this->waitingforRetryEmitted=false;
 					this->state=Disconnect;
 					this->abort=false;
-				}
-				else
-				{
-					emit waitingForRetry();
 				}
 				this->lock.unlock();
 

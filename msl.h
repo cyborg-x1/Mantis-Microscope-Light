@@ -3,9 +3,11 @@
 
 #include <QtGui/QWidget>
 #include <QColorDialog>
+#include <QMessageBox>
 #include <qdebug.h>
 #include "ui_msl.h"
 #include "qLinuxUSBSerialAutoConnector/QLinuxUSBSerialAutoConnector.h"
+
 
 class msl : public QWidget
 {
@@ -18,8 +20,7 @@ class msl : public QWidget
 
 	private:
 		Ui::mslClass ui;
-	    qUSBSerial::QLinuxUSBSerialAutoConnector connector;
-
+	    qUSBSerial::QLinuxUSBSerialAutoConnector serialConnection;
 
 	void updateLEDs();
 
@@ -37,6 +38,13 @@ class msl : public QWidget
 		void on_pushButton_EE_Save_clicked();
 		void on_pushButton_EE_Read_clicked();
 		void on_pushButton_EE_currentSetting_clicked();
+
+		void serialConnected();
+		void serialWaitingForRetry();
+
+	signals:
+		void retry();
+
 };
 
 #endif // MSL_H
