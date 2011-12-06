@@ -39,6 +39,7 @@ class msl : public QWidget
 		void on_pushButton_EE_Read_clicked();
 		void on_pushButton_EE_currentSetting_clicked();
 
+
 		void serialConnected();
 		void serialWaitingForRetry();
 

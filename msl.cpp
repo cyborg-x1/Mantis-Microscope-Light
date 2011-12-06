@@ -30,6 +30,10 @@ msl::msl(QWidget *parent)
 
     //Start serial connection thread
     serialConnection.start();
+    serialConnection.setStopBits(qUSBSerial::StopBits_2);
+
+    //Connect to Microscope Light
+    serialConnection.serialConnect();
 }
 
 msl::~msl()
