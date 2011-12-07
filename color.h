@@ -58,7 +58,7 @@ uint8_t setColorMEMFromArray(uint8_t addr, uint8_t const *arr);
  * This function copys the content of a color memory into a specified array
  * @return 0 on success, 1 on error
  */
-uint8_t ColorMEMToAArray(uint8_t addr, uint8_t *arr);
+uint8_t ColorMEMToArray(uint8_t addr, uint8_t *arr);
 
 
 /**
