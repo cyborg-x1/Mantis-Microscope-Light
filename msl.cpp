@@ -37,6 +37,7 @@ msl::msl(QWidget *parent) :
 	connect(this, SIGNAL(retry()), &this->serialConnection,
 			SLOT(retryConnect()));
 
+	connect(this, SIGNAL(sendArray(QByteArray)),&this->serialConnection,SLOT(sendArray(QByteArray)));
 
 	//Start serial connection thread
 	serialConnection.start();
@@ -119,7 +120,22 @@ void msl::on_pushButton_RGB_off_clicked()
 
 void msl::updateLEDs()
 {
-	qDebug() << "Updating LEDs!";
+	//qDebug() << "Updating LEDs!";
+	QByteArray array;
+	array.push_back('W');
+	array.push_back((char)0x0);
+	array.push_back((char)this->ui.verticalSlider_uv->value());
+	array.push_back((char)this->ui.verticalSlider_white->value());
+	array.push_back(this->colorDialog->currentColor().red());
+	array.push_back(this->colorDialog->currentColor().green());
+	array.push_back(this->colorDialog->currentColor().blue());
+	unsigned char checksum=0;
+	for(QByteArray::iterator it = array.begin(); it != array.end(); ++it)
+	{
+		checksum+=*it;
+	}
+	array.push_back(checksum);
+	emit sendArray(array);
 }
 
 void msl::on_pushButton_UV_White_Tggl_clicked()
@@ -208,4 +224,7 @@ void msl::serialConnectionAbort(int reason)
 	{
 		exit(1);
 	}
+
+
 }
+

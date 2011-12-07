@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'msl.h'
 **
-** Created: Wed Dec 7 11:16:17 2011
+** Created: Wed Dec 7 17:15:30 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,39 +23,41 @@ static const uint qt_meta_data_msl[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: signature, parameters, type, tag, flags
        5,    4,    4,    4, 0x05,
+      19,   13,    4,    4, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      19,   13,    4,    4, 0x08,
-      40,    4,    4,    4, 0x08,
-      69,    4,    4,    4, 0x08,
-      99,    4,    4,    4, 0x08,
-     133,  127,    4,    4, 0x08,
-     172,  127,    4,    4, 0x08,
-     214,    4,    4,    4, 0x08,
-     245,    4,    4,    4, 0x08,
-     277,    4,    4,    4, 0x08,
-     315,    4,    4,    4, 0x08,
-     350,    4,    4,    4, 0x08,
-     382,    4,    4,    4, 0x08,
-     414,    4,    4,    4, 0x08,
-     456,    4,    4,    4, 0x08,
-     474,    4,    4,    4, 0x08,
-     505,  498,    4,    4, 0x08,
+      47,   41,    4,    4, 0x08,
+      68,    4,    4,    4, 0x08,
+      97,    4,    4,    4, 0x08,
+     127,    4,    4,    4, 0x08,
+     161,  155,    4,    4, 0x08,
+     200,  155,    4,    4, 0x08,
+     242,    4,    4,    4, 0x08,
+     273,    4,    4,    4, 0x08,
+     305,    4,    4,    4, 0x08,
+     343,    4,    4,    4, 0x08,
+     378,    4,    4,    4, 0x08,
+     410,    4,    4,    4, 0x08,
+     442,    4,    4,    4, 0x08,
+     484,    4,    4,    4, 0x08,
+     502,    4,    4,    4, 0x08,
+     533,  526,    4,    4, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_msl[] = {
-    "msl\0\0retry()\0color\0colorChanged(QColor)\0"
+    "msl\0\0retry()\0array\0sendArray(QByteArray)\0"
+    "color\0colorChanged(QColor)\0"
     "on_pushButton_Wmax_clicked()\0"
     "on_pushButton_UVmax_clicked()\0"
     "on_pushButton_off_clicked()\0value\0"
@@ -102,25 +104,26 @@ int msl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: retry(); break;
-        case 1: colorChanged((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
-        case 2: on_pushButton_Wmax_clicked(); break;
-        case 3: on_pushButton_UVmax_clicked(); break;
-        case 4: on_pushButton_off_clicked(); break;
-        case 5: on_verticalSlider_uv_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 6: on_verticalSlider_white_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 7: on_pushButton_EEPROM_clicked(); break;
-        case 8: on_pushButton_RGB_off_clicked(); break;
-        case 9: on_pushButton_UV_White_Tggl_clicked(); break;
-        case 10: on_pushButton_UvWhiteOff_clicked(); break;
-        case 11: on_pushButton_EE_Save_clicked(); break;
-        case 12: on_pushButton_EE_Read_clicked(); break;
-        case 13: on_pushButton_EE_currentSetting_clicked(); break;
-        case 14: serialConnected(); break;
-        case 15: serialWaitingForRetry(); break;
-        case 16: serialConnectionAbort((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: sendArray((*reinterpret_cast< QByteArray(*)>(_a[1]))); break;
+        case 2: colorChanged((*reinterpret_cast< const QColor(*)>(_a[1]))); break;
+        case 3: on_pushButton_Wmax_clicked(); break;
+        case 4: on_pushButton_UVmax_clicked(); break;
+        case 5: on_pushButton_off_clicked(); break;
+        case 6: on_verticalSlider_uv_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: on_verticalSlider_white_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: on_pushButton_EEPROM_clicked(); break;
+        case 9: on_pushButton_RGB_off_clicked(); break;
+        case 10: on_pushButton_UV_White_Tggl_clicked(); break;
+        case 11: on_pushButton_UvWhiteOff_clicked(); break;
+        case 12: on_pushButton_EE_Save_clicked(); break;
+        case 13: on_pushButton_EE_Read_clicked(); break;
+        case 14: on_pushButton_EE_currentSetting_clicked(); break;
+        case 15: serialConnected(); break;
+        case 16: serialWaitingForRetry(); break;
+        case 17: serialConnectionAbort((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 17;
+        _id -= 18;
     }
     return _id;
 }
@@ -129,5 +132,12 @@ int msl::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void msl::retry()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, 0);
+}
+
+// SIGNAL 1
+void msl::sendArray(QByteArray _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 QT_END_MOC_NAMESPACE

@@ -15,7 +15,6 @@
 #include <sys/select.h>
 #include <sys/fcntl.h>
 
-
 namespace qUSBSerial
 {
 QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QString vid,
@@ -24,21 +23,21 @@ QLinuxUSBSerialAutoConnector::QLinuxUSBSerialAutoConnector(QString vid,
 		ChrSize_t chrsize, handshake_t handshake)
 {
 	//Initialize the variables...
-	this->manufacturer = manufacturer;
-	this->serial = serial;
-	this->product = product;
-	this->vid = vid;
-	this->pid = pid;
+	this->_manufacturer = manufacturer;
+	this->_serial = serial;
+	this->_product = product;
+	this->_vid = vid;
+	this->_pid = pid;
 	this->state = Disconnected;
-	this->establish_connection=false;
-	this->abort = false;
-	this->retry = false;
-	this->baudrate = baudrate;
-	this->stopbits = stopbits;
-	this->parity = parity;
-	this->chrsize = chrsize;
-	this->handshake = handshake;
-	this->fd=-1;
+	this->_serialEnabled = false;
+	this->_abort = false;
+	this->_retry = false;
+	this->_baudrate = baudrate;
+	this->_stopbits = stopbits;
+	this->_parity = parity;
+	this->_chrsize = chrsize;
+	this->_handshake = handshake;
+	this->fd = -1;
 }
 
 QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
@@ -50,7 +49,7 @@ QLinuxUSBSerialAutoConnector::~QLinuxUSBSerialAutoConnector()
 void QLinuxUSBSerialAutoConnector::run()
 {
 	this->lock.lockForWrite();
-		this->waitingforRetryEmitted = false;
+	this->waitingforRetryEmitted = false;
 	this->lock.unlock();
 	QTimer timer1;
 	connect(&timer1, SIGNAL(timeout()), this, SLOT(ifaceManagement()));
@@ -65,47 +64,52 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	case Disconnect:
 	{
 		qDebug() << "State:Disconnect";
+		this->state = Disconnected;
 		this->closeInterface();
-		this->state=Disconnected;
-		this->establish_connection=false;
+		setOpen(0);
+		this->clearSerialEnabled();
 		emit this->serialDisconnect();
 	}
 		break;
 	case Disconnected:
 	{
 		qDebug() << "State:Disconnected";
-		if (establish_connection == true) this->state = SearchSerial;
+		if (serialEnabled() == true)
+			this->state = SearchSerial;
 	}
 		break;
 	case Connect:
 	{
 		qDebug() << "State:Connect";
-		if (establish_connection == true)
+		if (serialEnabled() == true)
 		{
-			   fd=open(devFile.toLatin1(), O_RDWR | O_NDELAY);
-			   if (fd<0)
-			   {
-				   this->state=Disconnect;
-				   this->fd=-1;
-				   emit serialAbortedConnect(OPEN_DEV_FILE_FAILED);
-			   }
-			   else
-			   {
-				   tcflush(fd, TCIOFLUSH);
+			fd = open(getCurrentDevFile().toLatin1(), O_RDWR | O_NDELAY);
+			if (fd < 0)
+			{
+				this->state = Disconnect;
+				this->fd = -1;
+				emit serialAbortedConnect(OPEN_DEV_FILE_FAILED);
+			}
+			else
+			{
+				tcflush(fd, TCIOFLUSH);
 
-				   if(updateSerialSettings())
-				   {
-					   this->state=Disconnect;
-					   close(this->fd);
-					   this->fd=-1;
-					   emit serialAbortedConnect(APPLY_SETTINGS_FAILED);
-				   }
-				   else
-				   {
-					   this->state=Connected;
-					   emit serialConnected();
-				   }
-			   }
+				if (updateSerialSettings())
+				{
+					this->state = Disconnect;
+					close(this->fd);
+					this->fd = -1;
+					emit serialAbortedConnect(APPLY_SETTINGS_FAILED);
+				}
+				else
+				{
+					notifier = new QSocketNotifier(this->fd,
+							QSocketNotifier::Read);
+
+					this->state = Connected;
+					emit serialConnected();
+				}
+			}
 		}
 		else
 		{
@@ -116,9 +120,8 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	case Connected:
 	{
 		qDebug() << "State:Connected";
-		if (establish_connection == true)
+		if (serialEnabled() == true)
 		{
-			QString currentDevice = devFile;
 			if (!searchSerial())
 			{
 				this->state = WaitForRetry;
@@ -134,10 +137,9 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	case SearchSerial:
 	{
 		qDebug() << "State:SearchSerial";
-		if (establish_connection == true)
+		if (serialEnabled() == true)
 		{
-			bool found = this->searchSerial();
-			if (found)
+			if (this->searchSerial())
 			{
 				this->state = Connect;
 			}
@@ -154,7 +156,6 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 		break;
 	case WaitForRetry:
 	{
-
 		//We only send WaitingForRetry on entry.
 		if (!waitingforRetryEmitted)
 		{
@@ -163,20 +164,18 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 			emit waitingForRetry();
 		}
 		//Check if we got the signal for retrying it
-		this->lock.lockForWrite();
-		if (this->retry == true)
+		if (this->retry() == true)
 		{
 			this->waitingforRetryEmitted = false;
 			this->state = SearchSerial;
-			this->retry = false;
+			clearRetry();
 		}
-		else if (this->abort == true)
+		else if (abort() == true)
 		{
 			this->waitingforRetryEmitted = false;
 			this->state = Disconnect;
-			this->abort = false;
+			clearAbort();
 		}
-		this->lock.unlock();
 	}
 		break;
 	}
@@ -193,7 +192,7 @@ bool QLinuxUSBSerialAutoConnector::searchSerial()
 
 	bool found = false;
 	this->lock.lockForWrite();
-	this->devFile = "";
+	this->_devFile = "";
 	this->lock.unlock();
 
 	udev = udev_new();
@@ -238,21 +237,21 @@ bool QLinuxUSBSerialAutoConnector::searchSerial()
 			QString device_serialNumber = QString::fromLatin1(
 					udev_device_get_sysattr_value(dev, "serial"));
 
-			if ((device_vid == this->vid || this->vid == "")
-					&& (device_pid == this->pid || this->pid == "")
-					&& (device_manufacturerString == this->manufacturer
-							|| this->manufacturer == "")
-					&& (device_productString == this->product
-							|| this->product == "")
-					&& (device_serialNumber == this->serial
-							|| this->serial == ""))
+			if ((device_vid == this->_vid || this->_vid == "")
+					&& (device_pid == this->_pid || this->_pid == "")
+					&& (device_manufacturerString == this->_manufacturer
+							|| this->_manufacturer == "")
+					&& (device_productString == this->_product
+							|| this->_product == "")
+					&& (device_serialNumber == this->_serial
+							|| this->_serial == ""))
 			{
 
 				//Todo check if file can be opened...
 
 				found = true;
 				this->lock.lockForWrite();
-				this->devFile = deviceFile;
+				this->_devFile = deviceFile;
 				this->lock.unlock();
 				break;
 			}
@@ -272,7 +271,7 @@ QString QLinuxUSBSerialAutoConnector::getCurrentDevFile()
 {
 	QString file;
 	this->lock.lockForRead();
-	file = this->devFile;
+	file = this->_devFile;
 	this->lock.unlock();
 	return file;
 }
@@ -280,28 +279,30 @@ QString QLinuxUSBSerialAutoConnector::getCurrentDevFile()
 void QLinuxUSBSerialAutoConnector::serialConnect()
 {
 	this->lock.lockForWrite();
-	this->establish_connection = true;
+	this->_serialEnabled = true;
 	this->lock.unlock();
 }
 
 void QLinuxUSBSerialAutoConnector::serialDisconnect()
 {
 	this->lock.lockForWrite();
-	this->establish_connection = false;
+	this->_serialEnabled = false;
 	this->lock.unlock();
 }
 
 void QLinuxUSBSerialAutoConnector::retryConnect()
 {
 	this->lock.lockForWrite();
-	if(waitingforRetryEmitted==true)this->retry = true;
+	if (waitingforRetryEmitted == true)
+		this->_retry = true;
 	this->lock.unlock();
 }
 
 void QLinuxUSBSerialAutoConnector::abortConnect()
 {
 	this->lock.lockForWrite();
-	if(waitingforRetryEmitted)this->abort = true;
+	if (waitingforRetryEmitted)
+		this->_abort = true;
 	this->lock.unlock();
 }
 
@@ -310,8 +311,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	/* This function features some code from minicom 2.0.0, src/sysdep1.c
 	 * copied from cutecom, THANKS :-)
 	 */
-
-	if(fd<0)
+	if (fd < 0)
 	{
 		return 0;
 	}
@@ -319,8 +319,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	struct termios newtio;
 	speed_t br;
 
-	lock.lockForRead();
-	switch (this->baudrate)
+	switch (getBaudrate())
 	{
 	case BAUD_0:
 		br = B0;
@@ -380,12 +379,10 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		br = B230400;
 		break;
 	}
-	this->lock.unlock();
 	cfsetospeed(&newtio, br);
 	cfsetispeed(&newtio, br);
 
-	this->lock.lockForRead();
-	switch (this->chrsize)
+	switch (getCharSize())
 	{
 	case ChrSize_5:
 		newtio.c_cflag = (newtio.c_cflag & ~CSIZE) | CS5;
@@ -401,15 +398,14 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		newtio.c_cflag = (newtio.c_cflag & ~CSIZE) | CS8;
 		break;
 	}
-	this->lock.unlock();
+
 	newtio.c_cflag |= CLOCAL | CREAD;
 
-	this->lock.lockForRead();
-	if (this->parity == Parity_Even)
+	if (getParity() == Parity_Even)
 	{
 		newtio.c_cflag |= PARENB;
 	}
-	else if (parity == Parity_Odd)
+	else if (getParity() == Parity_Odd)
 	{
 		newtio.c_cflag |= (PARENB | PARODD);
 	}
@@ -417,10 +413,8 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~(PARENB | PARODD);
 	}
-	this->lock.unlock();
 
-	this->lock.lockForRead();
-	if (this->stopbits == StopBits_2)
+	if (getStopBits() == StopBits_2)
 	{
 		newtio.c_cflag |= CSTOPB;
 	}
@@ -428,16 +422,14 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~CSTOPB;
 	}
-	this->lock.unlock();
 
 	newtio.c_iflag = IGNBRK;
 
 	newtio.c_cflag &= ~CRTSCTS;
 
-	this->lock.lockForRead();
 	//software handshake
-	if (this->handshake == HandShake_HardwareAndSoftware
-			|| this->handshake == HandShake_Software)
+	if (getHandShake() == HandShake_HardwareAndSoftware
+			|| getHandShake() == HandShake_Software)
 	{
 		newtio.c_iflag |= IXON | IXOFF;
 	}
@@ -445,7 +437,6 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_iflag &= ~(IXON | IXOFF | IXANY);
 	}
-	this->lock.unlock();
 
 	newtio.c_lflag = 0;
 	newtio.c_oflag = 0;
@@ -470,10 +461,9 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 		return 2;
 	}
 
-	this->lock.lockForRead();
 	//hardware handshake
-	if (this->handshake == HandShake_HardwareAndSoftware
-			|| this->handshake == HandShake_Hardware)
+	if (getHandShake() == HandShake_HardwareAndSoftware
+			|| getHandShake() == HandShake_Hardware)
 	{
 		newtio.c_cflag |= CRTSCTS;
 	}
@@ -481,7 +471,6 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	{
 		newtio.c_cflag &= ~CRTSCTS;
 	}
-	this->lock.unlock();
 	if (tcsetattr(fd, TCSANOW, &newtio) != 0)
 	{
 		qDebug() << "tcsetattr() 3 failed";
@@ -494,7 +483,7 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
 {
 	this->lock.lockForWrite();
-	this->baudrate = baudrate;
+	this->_baudrate = baudrate;
 	updateSerialSettings();
 	this->lock.unlock();
 }
@@ -502,7 +491,7 @@ void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
 void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
 {
 	this->lock.lockForWrite();
-	this->stopbits = stopbits;
+	this->_stopbits = stopbits;
 	updateSerialSettings();
 	this->lock.unlock();
 }
@@ -510,7 +499,7 @@ void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
 void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
 {
 	this->lock.lockForWrite();
-	this->parity = parity;
+	this->_parity = parity;
 	updateSerialSettings();
 	this->lock.unlock();
 }
@@ -518,7 +507,7 @@ void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
 void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
 {
 	this->lock.lockForWrite();
-	this->chrsize = chrsize;
+	this->_chrsize = chrsize;
 	updateSerialSettings();
 	this->lock.unlock();
 }
@@ -526,7 +515,7 @@ void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
 void QLinuxUSBSerialAutoConnector::setHandShake(handshake_t handshake)
 {
 	this->lock.lockForWrite();
-	this->handshake = handshake;
+	this->_handshake = handshake;
 	updateSerialSettings();
 	this->lock.unlock();
 }
@@ -534,7 +523,55 @@ void QLinuxUSBSerialAutoConnector::setHandShake(handshake_t handshake)
 void QLinuxUSBSerialAutoConnector::closeInterface()
 {
 	close(this->fd);
-	this->fd=-1;
+	this->fd = -1;
+}
+
+void QLinuxUSBSerialAutoConnector::sendByte(uint8_t byte)
+{
+	if(1||isOpen())
+	{
+		 int res=::write(fd, &byte, 1);
+		   if (res<1)
+		   {
+
+		   }
+	}
+}
+
+void QLinuxUSBSerialAutoConnector::sendArray(QByteArray array)
+{
+	if(1||isOpen())
+	{
+		for(QByteArray::ConstIterator it = array.begin(); it!=array.end(); it++)
+		{
+			this->sendByte(*it);
+		}
+	}
+}
+
+void QLinuxUSBSerialAutoConnector::fileChanged(int fd)
+{
+	//Check if file descriptor is the same
+	if (fd != this->fd)
+	{
+		emit serialAbortedConnect(WRONG_FILE_DESCRIPTOR);
+	}
+
+	uint8_t buf[255];
+	int bytesRead = ::read(fd, buf, 255);
+
+	if (bytesRead < 0) //read nothing
+	{
+		return;
+	}
+	else if (bytesRead == 0) //device removed
+	{
+		emit serialAbortedConnect(DEVICE_REMOVED);
+	}
+	else
+	{
+		//TODO
+	}
 }
 
 } /* namespace qUSB */

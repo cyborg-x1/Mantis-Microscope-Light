@@ -4,10 +4,11 @@
 #include <QtGui/QWidget>
 #include <QColorDialog>
 #include <QMessageBox>
+#include <QByteArray>
 #include <qdebug.h>
 #include "ui_msl.h"
 #include "qLinuxUSBSerialAutoConnector/QLinuxUSBSerialAutoConnector.h"
-
+#include <inttypes.h>
 
 class msl : public QWidget
 {
@@ -38,14 +39,13 @@ class msl : public QWidget
 		void on_pushButton_EE_Save_clicked();
 		void on_pushButton_EE_Read_clicked();
 		void on_pushButton_EE_currentSetting_clicked();
-
-
 		void serialConnected();
 		void serialWaitingForRetry();
 		void serialConnectionAbort(int reason);
 
 	signals:
 		void retry();
+		void sendArray(QByteArray array);
 
 };
 
