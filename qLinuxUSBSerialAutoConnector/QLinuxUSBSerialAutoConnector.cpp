@@ -54,7 +54,7 @@ void QLinuxUSBSerialAutoConnector::run()
 	this->lock.unlock();
 	QTimer timer1;
 	connect(&timer1, SIGNAL(timeout()), this, SLOT(ifaceManagement()));
-	timer1.start(50);
+	timer1.start(500);
 	exec();
 }
 
@@ -67,6 +67,7 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 		qDebug() << "State:Disconnect";
 		this->closeInterface();
 		this->state=Disconnected;
+		this->establish_connection=false;
 		emit this->serialDisconnect();
 	}
 		break;
@@ -81,15 +82,30 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 		qDebug() << "State:Connect";
 		if (establish_connection == true)
 		{
-			if(openInterface())
-			{
-				//Error
-				this->state=Disconnected;
-			}
-			else
-			{
-				emit serialConnected();
-			}
+			   fd=open(devFile.toLatin1(), O_RDWR | O_NDELAY);
+			   if (fd<0)
+			   {
+				   this->state=Disconnect;
+				   this->fd=-1;
+				   emit serialAbortedConnect(OPEN_DEV_FILE_FAILED);
+			   }
+			   else
+			   {
+				   tcflush(fd, TCIOFLUSH);
+
+				   if(updateSerialSettings())
+				   {
+					   this->state=Disconnect;
+					   close(this->fd);
+					   this->fd=-1;
+					   emit serialAbortedConnect(APPLY_SETTINGS_FAILED);
+				   }
+				   else
+				   {
+					   this->state=Connected;
+					   emit serialConnected();
+				   }
+			   }
 		}
 		else
 		{
@@ -103,11 +119,7 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 		if (establish_connection == true)
 		{
 			QString currentDevice = devFile;
-			if (searchSerial())
-			{
-
-			}
-			else
+			if (!searchSerial())
 			{
 				this->state = WaitForRetry;
 				emit serialConnectionLost();
@@ -168,7 +180,6 @@ void QLinuxUSBSerialAutoConnector::ifaceManagement()
 	}
 		break;
 	}
-
 }
 
 bool QLinuxUSBSerialAutoConnector::searchSerial()
@@ -294,11 +305,12 @@ void QLinuxUSBSerialAutoConnector::abortConnect()
 	this->lock.unlock();
 }
 
-/* This function features some code from minicom 2.0.0, src/sysdep1.c
- * copied from cutecom
- */
 bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 {
+	/* This function features some code from minicom 2.0.0, src/sysdep1.c
+	 * copied from cutecom, THANKS :-)
+	 */
+
 	if(fd<0)
 	{
 		return 0;
@@ -479,29 +491,6 @@ bool QLinuxUSBSerialAutoConnector::updateSerialSettings()
 	return 0;
 }
 
-bool QLinuxUSBSerialAutoConnector::openInterface()
-{
-
-   fd=open(devFile.toLatin1(), O_RDWR | O_NDELAY);
-   if (fd<0)
-   {
-	   emit serialAbortedConnect(OPEN_DEV_FILE_FAILED);
-	   this->fd=-1;
-	   return 1;
-   }
-   tcflush(fd, TCIOFLUSH);
-
-   if(updateSerialSettings())
-   {
-	   emit serialAbortedConnect(APPLY_SETTINGS_FAILED);
-	   close(this->fd);
-	   this->fd=-1;
-	   return 2;
-   }
-
-   return 0;
-}
-
 void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
 {
 	this->lock.lockForWrite();
@@ -509,6 +498,7 @@ void QLinuxUSBSerialAutoConnector::setBaudrate(baudrate_t baudrate)
 	updateSerialSettings();
 	this->lock.unlock();
 }
+
 void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
 {
 	this->lock.lockForWrite();
@@ -516,6 +506,7 @@ void QLinuxUSBSerialAutoConnector::setStopBits(stopBits_t stopbits)
 	updateSerialSettings();
 	this->lock.unlock();
 }
+
 void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
 {
 	this->lock.lockForWrite();
@@ -523,6 +514,7 @@ void QLinuxUSBSerialAutoConnector::setParity(parity_t parity)
 	updateSerialSettings();
 	this->lock.unlock();
 }
+
 void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
 {
 	this->lock.lockForWrite();
@@ -530,6 +522,7 @@ void QLinuxUSBSerialAutoConnector::setCharSize(ChrSize_t chrsize)
 	updateSerialSettings();
 	this->lock.unlock();
 }
+
 void QLinuxUSBSerialAutoConnector::setHandShake(handshake_t handshake)
 {
 	this->lock.lockForWrite();

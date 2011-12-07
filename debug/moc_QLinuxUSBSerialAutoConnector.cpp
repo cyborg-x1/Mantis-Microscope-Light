@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'QLinuxUSBSerialAutoConnector.h'
 **
-** Created: Tue Dec 6 23:21:57 2011
+** Created: Wed Dec 7 11:16:15 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_qUSBSerial__QLinuxUSBSerialAutoConnector[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -41,12 +41,11 @@ static const uint qt_meta_data_qUSBSerial__QLinuxUSBSerialAutoConnector[] = {
      148,   41,   41,   41, 0x08,
      171,   41,  166,   41, 0x08,
      186,   41,  166,   41, 0x08,
-     209,   41,  166,   41, 0x08,
-     225,   41,   41,   41, 0x08,
+     209,   41,   41,   41, 0x08,
+     226,   41,   41,   41, 0x0a,
      242,   41,   41,   41, 0x0a,
-     258,   41,   41,   41, 0x0a,
-     277,   41,   41,   41, 0x0a,
-     292,   41,   41,   41, 0x0a,
+     261,   41,   41,   41, 0x0a,
+     276,   41,   41,   41, 0x0a,
 
        0        // eod
 };
@@ -57,9 +56,9 @@ static const char qt_meta_stringdata_qUSBSerial__QLinuxUSBSerialAutoConnector[] 
     "serialAbortedConnect(int)\0waitingForRetry()\0"
     "serialConnectionLost()\0ifaceManagement()\0"
     "bool\0searchSerial()\0updateSerialSettings()\0"
-    "openInterface()\0closeInterface()\0"
-    "serialConnect()\0serialDisconnect()\0"
-    "retryConnect()\0abortConnect()\0"
+    "closeInterface()\0serialConnect()\0"
+    "serialDisconnect()\0retryConnect()\0"
+    "abortConnect()\0"
 };
 
 const QMetaObject qUSBSerial::QLinuxUSBSerialAutoConnector::staticMetaObject = {
@@ -101,16 +100,14 @@ int qUSBSerial::QLinuxUSBSerialAutoConnector::qt_metacall(QMetaObject::Call _c, 
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
         case 7: { bool _r = updateSerialSettings();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 8: { bool _r = openInterface();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 9: closeInterface(); break;
-        case 10: serialConnect(); break;
-        case 11: serialDisconnect(); break;
-        case 12: retryConnect(); break;
-        case 13: abortConnect(); break;
+        case 8: closeInterface(); break;
+        case 9: serialConnect(); break;
+        case 10: serialDisconnect(); break;
+        case 11: retryConnect(); break;
+        case 12: abortConnect(); break;
         default: ;
         }
-        _id -= 14;
+        _id -= 13;
     }
     return _id;
 }

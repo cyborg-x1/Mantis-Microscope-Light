@@ -202,7 +202,7 @@ void msl::serialConnectionAbort(int reason)
 	int ret=msgbox.exec();
 	if(ret==QMessageBox::Retry)
 	{
-		emit retry();
+		serialConnection.serialConnect();
 	}
 	else
 	{

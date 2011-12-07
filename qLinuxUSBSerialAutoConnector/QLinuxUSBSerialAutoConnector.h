@@ -160,11 +160,6 @@ private slots:
 	bool updateSerialSettings();
 
 	/**
-	 * This function opens the interface
-	 */
-	bool openInterface();
-
-	/**
 	 * This function closes the interface
 	 */
 	void closeInterface();
