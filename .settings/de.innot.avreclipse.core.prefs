@@ -1,5 +1,5 @@
-#Fri Dec 02 09:54:48 CET 2011
-avrtarget/ClockFrequency=20000000
+#Thu Dec 08 05:35:25 CET 2011
+avrtarget/ClockFrequency=10000000
 avrtarget/ExtRAMSize=0
 avrtarget/ExtendedRAM=false
 avrtarget/MCUType=atmega324p
