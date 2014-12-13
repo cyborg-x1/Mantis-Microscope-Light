@@ -118,12 +118,24 @@ void msl::on_pushButton_RGB_off_clicked()
 	this->colorDialog->setCurrentColor(QColor::fromHsv(h, s, 0));
 }
 
+
+typedef enum
+{
+    SET_COLOR,
+}mcu_command_t;
+
+typedef enum
+{
+    DIRECT_LED,
+}mcu_color_addr_t;
+
 void msl::updateLEDs()
 {
 	//qDebug() << "Updating LEDs!";
 	QByteArray array;
-	array.push_back('W');
-	array.push_back((char)0x0);
+
+    array.push_back(SET_COLOR);
+    array.push_back(DIRECT_LED);
 	array.push_back((char)this->ui.verticalSlider_uv->value());
 	array.push_back((char)this->ui.verticalSlider_white->value());
 	array.push_back(this->colorDialog->currentColor().red());
@@ -135,6 +147,10 @@ void msl::updateLEDs()
 		checksum+=*it;
 	}
 	array.push_back(checksum);
+
+    //Start with AA 55
+    array.push_front(0x55);
+    array.push_front(0xAA);
 	emit sendArray(array);
 }
 

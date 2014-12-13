@@ -1,7 +1,7 @@
 /*
  * QLinuxUSBSerialAutoConnector.cpp
  */
-#include "../ui_qlinuxUSBserialautoconnectorgui.h"
+#include "ui_qlinuxUSBserialautoconnectorgui.h"
 #include "QLinuxUSBSerialAutoConnector.h"
 
 #include <libudev.h>

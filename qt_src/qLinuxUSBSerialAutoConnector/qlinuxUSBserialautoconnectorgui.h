@@ -2,9 +2,9 @@
 #define QLINUXUSBSERIALAUTOCONNECTORGUI_H
 
 #include <QTimer>
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QMessageBox>
-#include "../ui_qlinuxUSBserialautoconnectorgui.h"
+#include "ui_qlinuxUSBserialautoconnectorgui.h"
 
 
 class QLinuxUSBSerialAutoConnectorGUI : public QDialog

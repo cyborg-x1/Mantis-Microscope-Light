@@ -166,10 +166,154 @@ void copyColorArray(const uint8_t *from_array, uint8_t *to_array)
 	}
 }
 
+
+typedef enum
+{
+    SET_COLOR,
+
+    _READ_OPS,
+
+    READ_MEM,
+}mcu_command_t;
+
+
+typedef enum
+{
+	HEADER0,
+	HEADER1,
+	_CHECKSUM_COVERED_BEGIN,
+	COMMAND,
+	PAYLOAD,
+	_CHECKSUM_COVERED_END,
+	CHECKSUM,
+}receive_state_t;
+
 //Commands
 //RW / UV / W / R / G / B / Check
+
+
+void send_message(uint8_t *array, uint8_t len)
+{
+	unsigned checksum=0;
+
+	uart_sendByte(0xAA);
+	uart_sendByte(0x55);
+	for (int i = 0; i < len; ++i)
+	{
+		checksum^=array[i];
+		uart_sendByte(array[i]);
+	}
+	uart_sendByte(checksum);
+}
+
+
+
 ISR(USART0_RX_vect)
 {
+	static receive_state_t state=HEADER0;
+	static uint8_t payload_byte;
+	static uint8_t payload_array[10];
+	static mcu_command_t cmd;
+	static uint8_t checksum;
+
+
+
+	uint8_t cur_byte=UDR0;
+	if(state>_CHECKSUM_COVERED_BEGIN && state<_CHECKSUM_COVERED_END)
+	{
+		checksum^=cur_byte;
+	}
+	else
+	{
+		checksum=0;
+	}
+
+	switch(state)
+	{
+		case HEADER0:
+			if(0xAA == cur_byte)
+			{
+				state=HEADER1;
+			}
+			break;
+
+		case HEADER1:
+			if(0x55 == cur_byte)
+			{
+				state=COMMAND;
+			}
+			else
+			{
+				state=HEADER0;
+				checksum=0;
+			}
+			break;
+
+		case COMMAND:
+			payload_byte=0;
+			cmd=cur_byte;
+
+			if(cmd>_READ_OPS)
+			{
+				state=PAYLOAD;
+			}
+			else
+			{
+				state=CHECKSUM;
+			}
+
+			break;
+
+		case PAYLOAD:
+			payload_array[payload_byte]=cur_byte;
+			payload_byte++;
+
+			switch(cmd)
+			{
+			case SET_COLOR:
+				if(payload_byte==6)
+				{
+					state=CHECKSUM;
+				}
+				break;
+
+			default:
+				state=HEADER0;
+				break;
+			}
+			break;
+
+		case CHECKSUM:
+			if(checksum==cur_byte)
+			{
+				switch(cmd)
+				{
+				case SET_COLOR:
+					{
+						setColorMEMFromArray(payload_array[0],payload_array+1);
+					}
+					break;
+
+				case READ_MEM:
+					{
+
+					}
+					break;
+					default:
+						break;
+				}
+			}
+
+			state=HEADER0;
+			break;
+
+
+		default:
+			break;
+	}
+
+	return;
+
 	//TODO RESET TIMER VARS
 	//TODO TIMER INT ON
 	command_buffer[command_len]=UDR0;

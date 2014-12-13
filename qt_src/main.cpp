@@ -1,4 +1,5 @@
 #include "msl.h"
+#include "ui_msl.h"
 
 #include <QtGui>
 #include <QApplication>
