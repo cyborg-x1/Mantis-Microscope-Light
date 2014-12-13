@@ -312,81 +312,80 @@ ISR(USART0_RX_vect)
 			break;
 	}
 
-	return;
 
-	//TODO RESET TIMER VARS
-	//TODO TIMER INT ON
-	command_buffer[command_len]=UDR0;
-	if(command_len>=7)
-	{
-		//TODO TIMER INT OFF
-		switch(command_buffer[0])
-		{
-			//Write
-			case 'W':
-			{
-				//command_buffer[2]=4;//TODO REMOVE!!!
-
-				//Write color(5 bytes from byte 2) to given address (byte 1)
-				uint8_t err=setColorMEMFromArray(command_buffer[1],command_buffer+2);
-				if(!err)
-				{
-					uart_sendByte('A');
-				}
-				else
-				{
-					uart_sendByte('N');
-				}
-			}
-			break;
-
-			//Read MEM
-			case 'R':
-			{
-				uint8_t err=ColorMEMToArray(command_buffer[1],command_buffer+2);
-				if(!err)
-				{
-					uint8_t checksum=0;
-					for (int col = 0; col < 7; ++col)
-					{
-						checksum+=command_buffer[col];
-						uart_sendByte(command_buffer[col]);
-					}
-					uart_sendByte(checksum);
-				}
-				else
-				{
-					uart_sendByte('N');
-				}
-			}
-			break;
-
-			default:
-				uart_sendByte('N');
-			break;
-		}
-		command_len=0;
-	}
-	else
-	{
-		command_len++;
-	}
+//	//TODO RESET TIMER VARS
+//	//TODO TIMER INT ON
+//	command_buffer[command_len]=UDR0;
+//	if(command_len>=7)
+//	{
+//		//TODO TIMER INT OFF
+//		switch(command_buffer[0])
+//		{
+//			//Write
+//			case 'W':
+//			{
+//				//command_buffer[2]=4;//TODO REMOVE!!!
+//
+//				//Write color(5 bytes from byte 2) to given address (byte 1)
+//				uint8_t err=setColorMEMFromArray(command_buffer[1],command_buffer+2);
+//				if(!err)
+//				{
+//					uart_sendByte('A');
+//				}
+//				else
+//				{
+//					uart_sendByte('N');
+//				}
+//			}
+//			break;
+//
+//			//Read MEM
+//			case 'R':
+//			{
+//				uint8_t err=ColorMEMToArray(command_buffer[1],command_buffer+2);
+//				if(!err)
+//				{
+//					uint8_t checksum=0;
+//					for (int col = 0; col < 7; ++col)
+//					{
+//						checksum+=command_buffer[col];
+//						uart_sendByte(command_buffer[col]);
+//					}
+//					uart_sendByte(checksum);
+//				}
+//				else
+//				{
+//					uart_sendByte('N');
+//				}
+//			}
+//			break;
+//
+//			default:
+//				uart_sendByte('N');
+//			break;
+//		}
+//		command_len=0;
+//	}
+//	else
+//	{
+//		command_len++;
+//	}
 }
 
 
 ISR(TIMER2_COMPB_vect)
 {
-	time_6us4++;
-	if(time_6us4>=156)
-	{
-		time_6us4=0;
-		time_ms++;
-	}
-	if(time_ms>=100)//timeout 100ms
-	{
-		time_ms=0;
-		command_len=0;
-		//TODO TIMER INT OFF
-	}
+//	time_6us4++;
+//	if(time_6us4>=156)
+//	{
+//		time_6us4=0;
+//		time_ms++;
+//	}
+//	if(time_ms>=100)//timeout 100ms
+//	{
+//		time_ms=0;
+//		command_len=0;
+//		//TODO TIMER INT OFF
+//	}
 }
 
