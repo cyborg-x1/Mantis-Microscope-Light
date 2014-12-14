@@ -1,8 +1,10 @@
 #include "msl.h"
 
 msl::msl(QWidget *parent) :
-		QWidget(parent), serialConnection()
+        QWidget(parent),
+        serialConnection("","","",""/*Manufacturer String*/,""/*Product String*/)
 {
+
 	ui.setupUi(this);
 	//Create QColorDialog
 	this->colorDialog = new QColorDialog(this);
@@ -197,7 +199,7 @@ void msl::serialConnected()
 void msl::serialWaitingForRetry()
 {
 	this->setDisabled(1);
-	QLinuxUSBSerialAutoConnectorGUI retryGUI(this, 10);
+    QLinuxUSBSerialAutoConnectorGUI retryGUI(this, 10, "Microscope");
 	qDebug() << "receivedWatingForRetry";
 	int ret = retryGUI.exec();
 	if (ret)
