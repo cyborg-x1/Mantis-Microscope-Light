@@ -309,6 +309,7 @@ ISR(USART0_RX_vect)
 			}
 			else
 			{
+				//Checksum error message
 				response[0]=0xFF;
 				response[1]=checksum;
 				response[2]=cur_byte;
