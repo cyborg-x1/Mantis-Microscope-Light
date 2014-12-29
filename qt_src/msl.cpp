@@ -68,11 +68,13 @@ void msl::colorChanged(const QColor & color)
 void msl::on_pushButton_Wmax_clicked()
 {
 	this->ui.verticalSlider_white->setValue(255);
+    updateLEDs();
 }
 
 void msl::on_pushButton_UVmax_clicked()
 {
 	this->ui.verticalSlider_uv->setValue(255);
+        updateLEDs();
 }
 
 void msl::on_pushButton_off_clicked()
@@ -81,6 +83,7 @@ void msl::on_pushButton_off_clicked()
 	this->colorDialog->setCurrentColor(QColor::fromHsv(0, 0, 0));
 	this->ui.verticalSlider_uv->setValue(0);
 	this->ui.verticalSlider_white->setValue(0);
+    updateLEDs();
 }
 
 void msl::on_verticalSlider_uv_valueChanged(int value)
@@ -118,6 +121,7 @@ void msl::on_pushButton_RGB_off_clicked()
 	int h, s, v;
 	this->colorDialog->currentColor().getHsv(&h, &s, &v);
 	this->colorDialog->setCurrentColor(QColor::fromHsv(h, s, 0));
+    updateLEDs();
 }
 
 
