@@ -47,6 +47,7 @@ msl::msl(QWidget *parent) :
 
 	//Connect to Microscope Light
 	serialConnection.serialConnect();
+
 }
 
 msl::~msl()
@@ -201,6 +202,7 @@ void msl::on_pushButton_EE_currentSetting_clicked()
 void msl::serialConnected()
 {
 	this->setEnabled(1);
+    this->updateLEDs();
 }
 
 void msl::serialWaitingForRetry()
