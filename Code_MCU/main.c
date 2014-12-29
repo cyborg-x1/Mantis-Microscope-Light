@@ -22,8 +22,13 @@ void init()
  */
 int main()
 {
+
 	init();
-	while(1) color_handler();
+
+	while(1)
+	{
+		color_handler();
+	}
 }
 
 

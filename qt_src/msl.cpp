@@ -110,7 +110,7 @@ void msl::on_pushButton_EEPROM_clicked()
 	}
 	else
 	{
-		ushort a = 0x00BB; //   ">>" Symbol
+        ushort a = 0x00BB; // ">>" Symbol
 		this->ui.groupBox_EEProm->setHidden(1);
 		this->ui.pushButton_EEPROM->setText(QString::fromUtf16(&a, 1));
 	}

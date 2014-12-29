@@ -130,6 +130,7 @@ void color_handler()
 			setColorsFromArray(newlight);
 		}
 	}
+
 }
 
 void color_init()
@@ -139,6 +140,9 @@ void color_init()
 	DDRD|=(1<<PD4)|(1<<PD5)|(1<<PB7);
 	PORTB&=~((1<<PB4)|(1<<PB3));
 	PORTD&=~((1<<PD4)|(1<<PD5)|(1<<PB7));
+
+
+
 
 	//PWM -- RED non inv. FAST PWM (Prescaler 1/64)
 	TCCR0A=0x81;
@@ -283,6 +287,7 @@ ISR(USART0_RX_vect)
 		case CHECKSUM:
 		{
 			uint8_t response[6];
+			uint8_t error=0;
 			if(checksum==cur_byte)
 			{
 
@@ -304,15 +309,22 @@ ISR(USART0_RX_vect)
 					}
 					break;
 					default:
+						error=1;
 						break;
 				}
 			}
 			else
 			{
+				error=1;
+			}
+
+			if(error)
+			{
 				//Checksum error message
 				response[0]=0xFF;
-				response[1]=checksum;
-				response[2]=cur_byte;
+				response[1]=cmd;
+				response[2]=checksum;
+				response[3]=cur_byte;
 				send_message(response,1);
 			}
 		}
