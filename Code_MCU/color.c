@@ -68,7 +68,6 @@ uint8_t setColorMEMFromArray(uint8_t addr, const uint8_t *arr)
 	{
 	//Current LED brightness
 	case 0:
-		uart_sendByte('0');
 		copyColorArray(arr, newlight);
 		break;
 	//pedal
@@ -211,10 +210,11 @@ void send_message(uint8_t *array, uint8_t len)
 ISR(USART0_RX_vect)
 {
 	static receive_state_t state=HEADER0;
-	static uint8_t payload_byte;
+	static uint8_t payload_byte=0;
 	static uint8_t payload_array[10];
 	static mcu_command_t cmd;
 	static uint8_t checksum;
+
 
 
 
@@ -223,16 +223,13 @@ ISR(USART0_RX_vect)
 	{
 		checksum^=cur_byte;
 	}
-	else
-	{
-		checksum=0;
-	}
 
 	switch(state)
 	{
 		case HEADER0:
 			if(0xAA == cur_byte)
 			{
+
 				state=HEADER1;
 			}
 			break;
@@ -241,11 +238,11 @@ ISR(USART0_RX_vect)
 			if(0x55 == cur_byte)
 			{
 				state=COMMAND;
+				checksum=0;
 			}
 			else
 			{
 				state=HEADER0;
-				checksum=0;
 			}
 			break;
 
@@ -253,7 +250,7 @@ ISR(USART0_RX_vect)
 			payload_byte=0;
 			cmd=cur_byte;
 
-			if(cmd>_READ_OPS)
+			if(cmd<_READ_OPS)
 			{
 				state=PAYLOAD;
 			}
@@ -284,13 +281,20 @@ ISR(USART0_RX_vect)
 			break;
 
 		case CHECKSUM:
+		{
+			uint8_t response[6];
 			if(checksum==cur_byte)
 			{
+
+
 				switch(cmd)
 				{
 				case SET_COLOR:
 					{
-						setColorMEMFromArray(payload_array[0],payload_array+1);
+						uint8_t response[2];
+						response[0]=cmd;
+						response[1]=setColorMEMFromArray(payload_array[0],payload_array+1);
+						send_message(response,2);
 					}
 					break;
 
@@ -303,8 +307,18 @@ ISR(USART0_RX_vect)
 						break;
 				}
 			}
+			else
+			{
+				response[0]=0xFF;
+				response[1]=checksum;
+				response[2]=cur_byte;
+				send_message(response,1);
+			}
+		}
+
 
 			state=HEADER0;
+
 			break;
 
 

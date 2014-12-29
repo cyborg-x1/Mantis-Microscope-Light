@@ -133,7 +133,7 @@ typedef enum
 
 void msl::updateLEDs()
 {
-	//qDebug() << "Updating LEDs!";
+    qDebug() << "Updating LEDs!";
 	QByteArray array;
 
     array.push_back(SET_COLOR);
@@ -146,13 +146,16 @@ void msl::updateLEDs()
 	unsigned char checksum=0;
 	for(QByteArray::iterator it = array.begin(); it != array.end(); ++it)
 	{
-		checksum+=*it;
+        checksum^=*it;
 	}
 	array.push_back(checksum);
 
     //Start with AA 55
     array.push_front(0x55);
     array.push_front(0xAA);
+
+
+
 	emit sendArray(array);
 }
 
