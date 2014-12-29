@@ -1,7 +1,4 @@
-EESchema Schematic File Version 2  date Do 03 Nov 2011 14:47:05 CET
-LIBS:rl_con
-LIBS:rl_device
-LIBS:rl_mech
+EESchema Schematic File Version 2
 LIBS:74xx
 LIBS:adc-dac
 LIBS:analog_switches
@@ -36,19 +33,19 @@ LIBS:pspice
 LIBS:regul
 LIBS:siliconi
 LIBS:special
-LIBS:SymbolsSimilarEN60617+oldDIN617
 LIBS:texas
 LIBS:transistors
 LIBS:ttl_ieee
 LIBS:valves
 LIBS:xilinx
 LIBS:MantisLight-cache
-EELAYER 24  0
+EELAYER 27 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
+encoding utf-8
 Sheet 2 5
 Title ""
-Date "3 nov 2011"
+Date "28 dec 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -89,6 +86,8 @@ U 1 1 4E9D5A31
 P 7850 2550
 F 0 "Q8" H 7860 2720 60  0000 R CNN
 F 1 "MOSFET_N" H 7860 2400 60  0000 R CNN
+F 2 "" H 7850 2550 60  0001 C CNN
+F 3 "" H 7850 2550 60  0001 C CNN
 	1    7850 2550
 	0    1    1    0   
 $EndComp
@@ -100,6 +99,8 @@ U 1 1 4E9D5A17
 P 7350 2200
 F 0 "R44" V 7430 2200 50  0000 C CNN
 F 1 "10k" V 7350 2200 50  0000 C CNN
+F 2 "" H 7350 2200 60  0001 C CNN
+F 3 "" H 7350 2200 60  0001 C CNN
 	1    7350 2200
 	1    0    0    -1  
 $EndComp
@@ -109,6 +110,8 @@ U 1 1 4E9D5A11
 P 8250 2200
 F 0 "R45" V 8330 2200 50  0000 C CNN
 F 1 "10k" V 8250 2200 50  0000 C CNN
+F 2 "" H 8250 2200 60  0001 C CNN
+F 3 "" H 8250 2200 60  0001 C CNN
 	1    8250 2200
 	1    0    0    -1  
 $EndComp

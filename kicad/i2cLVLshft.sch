@@ -1,7 +1,4 @@
-EESchema Schematic File Version 2  date Do 03 Nov 2011 14:47:05 CET
-LIBS:rl_con
-LIBS:rl_device
-LIBS:rl_mech
+EESchema Schematic File Version 2
 LIBS:74xx
 LIBS:adc-dac
 LIBS:analog_switches
@@ -36,19 +33,19 @@ LIBS:pspice
 LIBS:regul
 LIBS:siliconi
 LIBS:special
-LIBS:SymbolsSimilarEN60617+oldDIN617
 LIBS:texas
 LIBS:transistors
 LIBS:ttl_ieee
 LIBS:valves
 LIBS:xilinx
 LIBS:MantisLight-cache
-EELAYER 24  0
+EELAYER 27 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
+encoding utf-8
 Sheet 3 5
 Title ""
-Date "3 nov 2011"
+Date "28 dec 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -104,6 +101,8 @@ AR Path="/4E9D5349/4E9D54F5" Ref="R?"  Part="1"
 AR Path="/4E9D5349/4E9D54FD" Ref="R43"  Part="1" 
 F 0 "R43" V 6080 2450 50  0000 C CNN
 F 1 "10k" V 6000 2450 50  0000 C CNN
+F 2 "" H 6000 2450 60  0001 C CNN
+F 3 "" H 6000 2450 60  0001 C CNN
 	1    6000 2450
 	1    0    0    -1  
 $EndComp
@@ -115,6 +114,8 @@ AR Path="/4E9D5349/4E9D54F5" Ref="R?"  Part="1"
 AR Path="/4E9D5349/4E9D54FC" Ref="R42"  Part="1" 
 F 0 "R42" V 5880 2450 50  0000 C CNN
 F 1 "10k" V 5800 2450 50  0000 C CNN
+F 2 "" H 5800 2450 60  0001 C CNN
+F 3 "" H 5800 2450 60  0001 C CNN
 	1    5800 2450
 	1    0    0    -1  
 $EndComp
@@ -126,6 +127,8 @@ AR Path="/4E9D5349/4E9D54F5" Ref="R?"  Part="1"
 AR Path="/4E9D5349/4E9D54FA" Ref="R41"  Part="1" 
 F 0 "R41" V 4330 2450 50  0000 C CNN
 F 1 "10k" V 4250 2450 50  0000 C CNN
+F 2 "" H 4250 2450 60  0001 C CNN
+F 3 "" H 4250 2450 60  0001 C CNN
 	1    4250 2450
 	1    0    0    -1  
 $EndComp
@@ -135,6 +138,8 @@ U 1 1 4E9D54F5
 P 4050 2450
 F 0 "R40" V 4130 2450 50  0000 C CNN
 F 1 "10k" V 4050 2450 50  0000 C CNN
+F 2 "" H 4050 2450 60  0001 C CNN
+F 3 "" H 4050 2450 60  0001 C CNN
 	1    4050 2450
 	1    0    0    -1  
 $EndComp
@@ -146,6 +151,8 @@ U 1 1 4E9D541D
 P 4800 3350
 F 0 "Q6" H 4810 3520 60  0000 R CNN
 F 1 "MOSFET_N" H 4810 3200 60  0000 R CNN
+F 2 "" H 4800 3350 60  0001 C CNN
+F 3 "" H 4800 3350 60  0001 C CNN
 	1    4800 3350
 	0    1    1    0   
 $EndComp
@@ -155,6 +162,8 @@ U 1 1 4E9D541A
 P 5200 2850
 F 0 "Q7" H 5210 3020 60  0000 R CNN
 F 1 "MOSFET_N" H 5210 2700 60  0000 R CNN
+F 2 "" H 5200 2850 60  0001 C CNN
+F 3 "" H 5200 2850 60  0001 C CNN
 	1    5200 2850
 	0    1    1    0   
 $EndComp
