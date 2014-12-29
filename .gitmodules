@@ -1,0 +1,6 @@
+[submodule "rl_kicad_lib"]
+	path = rl_kicad_lib
+	url = https://github.com/cyborg-x1/rl_kicad_lib
+[submodule "kicad/rl_kicad_lib"]
+	path = kicad/rl_kicad_lib
+	url = https://github.com/cyborg-x1/rl_kicad_lib
